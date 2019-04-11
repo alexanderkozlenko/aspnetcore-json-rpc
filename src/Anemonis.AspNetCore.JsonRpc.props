@@ -2,7 +2,7 @@
 <Project>
   <PropertyGroup>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <VersionPrefix>1.15.1</VersionPrefix>
+    <VersionPrefix>1.16.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
   <PropertyGroup>
