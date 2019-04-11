@@ -94,6 +94,16 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs
                         ["p0"] = typeof(long),
                         ["p1"] = typeof(string)
                     }),
+                ["b0it"] = new JsonRpcRequestContract(
+                    new[]
+                    {
+                        typeof(long)
+                    }),
+                ["b1it"] = new JsonRpcRequestContract(
+                    new[]
+                    {
+                        typeof(long)
+                    })
             };
         }
 

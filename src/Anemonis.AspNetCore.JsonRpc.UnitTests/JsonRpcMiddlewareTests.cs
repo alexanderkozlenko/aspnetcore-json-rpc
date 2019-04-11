@@ -204,9 +204,10 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
         [DataRow("b0t1p2e0d0")]
         [DataRow("b0t1p2e1d0")]
         [DataRow("b0t1p2e1d1")]
+        [DataRow("b0ie")]
         [DataRow("b0iu")]
         [DataRow("b0is")]
-        [DataRow("b0ie")]
+        [DataRow("b0it")]
         [DataRow("b1t0p0e0d0")]
         [DataRow("b1t0p0e1d0")]
         [DataRow("b1t0p0e1d1")]
@@ -227,6 +228,7 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
         [DataRow("b1t1p2e1d1")]
         [DataRow("b1iu")]
         [DataRow("b1is")]
+        [DataRow("b1it")]
         public async Task InvokeAsync(string code)
         {
             var requestActualContent = EmbeddedResourceManager.GetString($"Assets.{code}_req.json");
