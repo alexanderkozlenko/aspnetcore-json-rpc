@@ -5,7 +5,7 @@ using Anemonis.JsonRpc;
 
 namespace Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs
 {
-    internal sealed class JsonRpcTestHandler1 : IJsonRpcHandler, IDisposable
+    public sealed class JsonRpcTestHandler1 : IJsonRpcHandler, IDisposable
     {
         public void Dispose()
         {

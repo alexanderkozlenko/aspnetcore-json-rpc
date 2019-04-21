@@ -6,7 +6,7 @@ using Anemonis.JsonRpc;
 namespace Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs
 {
     [JsonRpcRoute("/api")]
-    internal sealed class JsonRpcTestHandler2 : IJsonRpcHandler
+    public sealed class JsonRpcTestHandler2 : IJsonRpcHandler
     {
         public IReadOnlyDictionary<string, JsonRpcRequestContract> GetContracts()
         {

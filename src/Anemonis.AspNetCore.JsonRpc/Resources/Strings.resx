@@ -117,59 +117,59 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="handler.request_data.accepted_batch" xml:space="preserve">
-    <value>{0} JSON-RPC batch with {1} request(s) to the path "{2}" is accepted for processing</value>
+  <data name="handler.batch_has_duplicate_identifiers" xml:space="preserve">
+    <value>The request contains a JSON-RPC batch with duplicate identifiers</value>
   </data>
-  <data name="handler.request_data.accepted_single" xml:space="preserve">
-    <value>{0} JSON-RPC request to the path "{1}" is accepted for processing</value>
+  <data name="handler.data_is_batch" xml:space="preserve">
+    <value>The request contains a JSON-RPC batch (size: {0})</value>
   </data>
-  <data name="handler.request_data.declined" xml:space="preserve">
-    <value>{0} JSON-RPC request to the path "{1}" is not accepted for processing</value>
+  <data name="handler.data_is_message" xml:space="preserve">
+    <value>The request contains a single JSON-RPC message</value>
   </data>
-  <data name="handler.request_data.duplicate_ids" xml:space="preserve">
-    <value>{0} JSON-RPC batch contains requests with duplicate identifiers</value>
+  <data name="handler.data_invalid" xml:space="preserve">
+    <value>The request contains invalid JSON-RPC data</value>
   </data>
-  <data name="handler.response.handled_notification" xml:space="preserve">
-    <value>{0} JSON-RPC request to the method "{1}" processed as notification</value>
+  <data name="handler.handled_notification_as_request" xml:space="preserve">
+    <value>A JSON-RPC notification handled as request due to server configuration (index: {0})</value>
   </data>
-  <data name="handler.response.handled_notification_as_response" xml:space="preserve">
-    <value>{0} JSON-RPC request "{1}" to the method "{2}" processed as notification</value>
+  <data name="handler.handled_notification_successfully" xml:space="preserve">
+    <value>A JSON-RPC notification handled successfully (index: {0})</value>
   </data>
-  <data name="handler.response.handled_with_error" xml:space="preserve">
-    <value>{0} JSON-RPC request "{1}" to the method "{2}" processed with error {3} ("{4}")</value>
+  <data name="handler.handled_request_with_error_as_notification" xml:space="preserve">
+    <value>A JSON-RPC request handled with error {0} as notification due to client demand (index: {1})</value>
   </data>
-  <data name="handler.response.handled_with_error_as_notification" xml:space="preserve">
-    <value>{0} JSON-RPC request to the method "{1}" processed with error {2} ("{3}") as notification</value>
+  <data name="handler.handled_request_with_error_successfully" xml:space="preserve">
+    <value>A JSON-RPC request handled with error {0} successfully (index: {1})</value>
   </data>
-  <data name="handler.response.handled_with_result" xml:space="preserve">
-    <value>{0} JSON-RPC request "{1}" to the method "{2}" processed with result</value>
+  <data name="handler.handled_request_with_result_as_notification" xml:space="preserve">
+    <value>A JSON-RPC request handled with result as notification due to client demand (index: {0})</value>
   </data>
-  <data name="handler.response.handled_with_result_as_notification" xml:space="preserve">
-    <value>{0} JSON-RPC request to the method "{1}" processed with result as notification</value>
+  <data name="handler.handled_request_with_result_successfully" xml:space="preserve">
+    <value>A JSON-RPC request handled with result successfully (index: {0})</value>
   </data>
-  <data name="handler.request.invalid_message" xml:space="preserve">
-    <value>{0} JSON-RPC request "{1}" is not considered as a valid request</value>
+  <data name="handler.request_invalid" xml:space="preserve">
+    <value>A JSON-RPC request is invalid (index: {0})</value>
   </data>
-  <data name="handler.response.invalid_id" xml:space="preserve">
-    <value>The request and response identifiers are different</value>
+  <data name="handler.invalid_error_code" xml:space="preserve">
+    <value>JSON-RPC response has reserved error code</value>
   </data>
-  <data name="handler.contract.method.system_name" xml:space="preserve">
-    <value>The JSON-RPC method name "{0}" has the system extension prefix</value>
+  <data name="handler.invalid_response_id" xml:space="preserve">
+    <value>JSON-RPC request and response have different identifiers</value>
   </data>
-  <data name="handler.contract.method.undefined_name" xml:space="preserve">
-    <value>The JSON-RPC method name is null</value>
+  <data name="handler.contract.method_name.invalid_value" xml:space="preserve">
+    <value>JSON-RPC method name is null</value>
+  </data>
+  <data name="handler.contract.method_name.reserved_prefix" xml:space="preserve">
+    <value>JSON-RPC method name "{0}" contains reserved prefix</value>
   </data>
   <data name="infrastructure.type_doesnt_implement_interface" xml:space="preserve">
-    <value>The specified type does not implement interface {0}</value>
+    <value>The specified type does not implement {0} interface</value>
   </data>
   <data name="infrastructure.type_isnt_class" xml:space="preserve">
     <value>The specified type is not a class</value>
   </data>
-  <data name="rpc.error.duplicate_ids" xml:space="preserve">
-    <value>The provided batch contains requests with duplicate identifiers</value>
-  </data>
-  <data name="rpc.error.invalid_operation" xml:space="preserve">
-    <value>An error occurred during processing the request</value>
+  <data name="rpc.error.batch_has_duplicate_identifiers" xml:space="preserve">
+    <value>The provided batch has duplicate identifiers</value>
   </data>
   <data name="rpc.error.invalid_format" xml:space="preserve">
     <value>The provided JSON is invalid</value>
@@ -179,6 +179,9 @@
   </data>
   <data name="rpc.error.invalid_method" xml:space="preserve">
     <value>The specified method does not exist or is not available</value>
+  </data>
+  <data name="rpc.error.invalid_operation" xml:space="preserve">
+    <value>An error occurred during processing the request</value>
   </data>
   <data name="rpc.error.invalid_parameters" xml:space="preserve">
     <value>The specified method parameters are invalid</value>

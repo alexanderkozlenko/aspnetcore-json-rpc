@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Anemonis.AspNetCore.JsonRpc.UnitTests.Resources;
 using Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -20,14 +22,39 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
         [TestMethod]
         public void ConstructorWithServicesWhenServicesIsNull()
         {
+            var environmentMock = new Mock<IHostingEnvironment>(MockBehavior.Strict);
+            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Strict);
+
             Assert.ThrowsException<ArgumentNullException>(() =>
-                new JsonRpcMiddleware<JsonRpcTestHandler1>(null));
+                new JsonRpcMiddleware<JsonRpcTestHandler1>(null, environmentMock.Object, loggerMock.Object));
+        }
+
+        [TestMethod]
+        public void ConstructorWithServicesWhenEnvironmentIsNull()
+        {
+            var serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Strict);
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, null, loggerMock.Object));
+        }
+
+        [TestMethod]
+        public void ConstructorWithServicesWhenLoggerIsNull()
+        {
+            var serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            var environmentMock = new Mock<IHostingEnvironment>(MockBehavior.Strict);
+
+            Assert.ThrowsException<ArgumentNullException>(() =>
+                new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, environmentMock.Object, null));
         }
 
         [TestMethod]
         public void Dispose()
         {
             var serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
+            var environmentMock = new Mock<IHostingEnvironment>(MockBehavior.Strict);
+            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Strict);
             var jsonRpcHandler = new JsonRpcTestHandler1();
             var jsonRpcHandlerDisposed = false;
 
@@ -40,7 +67,7 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
             serviceProviderMock.Setup(o => o.GetService(typeof(ILoggerFactory)))
                 .Returns(null);
 
-            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object);
+            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, environmentMock.Object, loggerMock.Object);
 
             jsonRpcMiddleware.Dispose();
 
@@ -67,7 +94,9 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
             serviceProviderMock.Setup(o => o.GetService(typeof(ILoggerFactory)))
                 .Returns(null);
 
-            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object);
+            var environmentMock = new Mock<IHostingEnvironment>(MockBehavior.Strict);
+            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Strict);
+            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, environmentMock.Object, loggerMock.Object);
             var httpContext = new DefaultHttpContext();
 
             httpContext.Request.Method = method;
@@ -96,7 +125,9 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
             serviceProviderMock.Setup(o => o.GetService(typeof(ILoggerFactory)))
                 .Returns(null);
 
-            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object);
+            var environmentMock = new Mock<IHostingEnvironment>(MockBehavior.Strict);
+            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Strict);
+            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, environmentMock.Object, loggerMock.Object);
             var httpContext = new DefaultHttpContext();
 
             httpContext.Request.Method = HttpMethods.Post;
@@ -120,7 +151,9 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
             serviceProviderMock.Setup(o => o.GetService(typeof(ILoggerFactory)))
                 .Returns(null);
 
-            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object);
+            var environmentMock = new Mock<IHostingEnvironment>(MockBehavior.Strict);
+            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Strict);
+            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, environmentMock.Object, loggerMock.Object);
             var httpContext = new DefaultHttpContext();
 
             httpContext.Request.Method = HttpMethods.Post;
@@ -144,7 +177,9 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
             serviceProviderMock.Setup(o => o.GetService(typeof(ILoggerFactory)))
                 .Returns(null);
 
-            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object);
+            var environmentMock = new Mock<IHostingEnvironment>(MockBehavior.Strict);
+            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Strict);
+            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, environmentMock.Object, loggerMock.Object);
             var httpContext = new DefaultHttpContext();
 
             httpContext.Request.Method = HttpMethods.Post;
@@ -173,7 +208,9 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
             serviceProviderMock.Setup(o => o.GetService(typeof(ILoggerFactory)))
                 .Returns(null);
 
-            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object);
+            var environmentMock = new Mock<IHostingEnvironment>(MockBehavior.Strict);
+            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Strict);
+            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, environmentMock.Object, loggerMock.Object);
             var httpContext = new DefaultHttpContext();
 
             httpContext.Request.Method = HttpMethods.Post;
@@ -244,7 +281,22 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
             serviceProviderMock.Setup(o => o.GetService(typeof(ILoggerFactory)))
                 .Returns(null);
 
-            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object);
+            var environmentMock = new Mock<IHostingEnvironment>(MockBehavior.Strict);
+
+            environmentMock
+                .Setup(o => o.EnvironmentName)
+                .Returns(EnvironmentName.Production);
+
+            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Strict);
+
+            loggerMock
+                .Setup(o => o.IsEnabled(It.IsAny<LogLevel>()))
+                .Returns(true);
+            loggerMock
+                .Setup(o => o.Log(It.IsAny<LogLevel>(), It.IsAny<EventId>(), It.IsAny<object>(), It.IsAny<Exception>(), It.IsAny<Func<object, Exception, string>>()))
+                .Callback<LogLevel, EventId, object, Exception, Func<object, Exception, string>>((ll, ei, st, ex, fr) => Trace.WriteLine($"Level: '{ll}', Id: ({ei.Id}, '{ei.Name}'), State: '{st}'"));
+
+            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, environmentMock.Object, loggerMock.Object);
             var httpContext = new DefaultHttpContext();
 
             httpContext.Request.Method = HttpMethods.Post;

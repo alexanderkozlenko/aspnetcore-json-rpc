@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Anemonis.AspNetCore.JsonRpc.Resources;
 using Anemonis.JsonRpc;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -21,37 +22,52 @@ namespace Anemonis.AspNetCore.JsonRpc
     public sealed class JsonRpcMiddleware<T> : IMiddleware, IDisposable
         where T : class, IJsonRpcHandler
     {
-        private const string _mediaTypeValue = "application/json";
-        private const string _contentTypeHeaderValue = "application/json; charset=utf-8";
         private const int _streamBufferSize = 1024;
 
-        private static readonly IReadOnlyDictionary<string, Encoding> _supportedEncodings = CreateSupportedEncodings();
-        private static readonly IReadOnlyDictionary<long, JsonRpcError> _standardJsonRpcErrors = CreateStandardJsonRpcErrors();
+        private static readonly string _contentTypeHeaderValue = $"{MediaTypes.ApplicationJson}; charset=utf-8";
+        private static readonly Dictionary<string, Encoding> _supportedEncodings;
+        private static readonly Dictionary<long, JsonRpcError> _standardJsonRpcErrors;
+        private static readonly Dictionary<long, JsonRpcResponse> _standardJsonRpcResponses;
 
+        private readonly IHostingEnvironment _environment;
+        private readonly ILogger _logger;
         private readonly T _handler;
         private readonly JsonRpcSerializer _serializer;
-        private readonly ILogger _logger;
+
+        static JsonRpcMiddleware()
+        {
+            _supportedEncodings = CreateSupportedEncodings();
+            _standardJsonRpcErrors = CreateStandardJsonRpcErrors();
+            _standardJsonRpcResponses = CreateStandardJsonRpcResponses(_standardJsonRpcErrors);
+        }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcMiddleware{T}" /> class.</summary>
         /// <param name="services">The <see cref="IServiceProvider" /> instance for retrieving service objects.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="services" /> is <see langword="null" />.</exception>
-        public JsonRpcMiddleware(IServiceProvider services)
+        /// <param name="environment">The <see cref="IHostingEnvironment" /> instance for retrieving hosting environment information.</param>
+        /// <param name="logger">The <see cref="ILogger{T}" /> instance for logging.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="services" />, <paramref name="environment" />, or <paramref name="logger" /> is <see langword="null" />.</exception>
+        public JsonRpcMiddleware(IServiceProvider services, IHostingEnvironment environment, ILogger<JsonRpcMiddleware<T>> logger)
         {
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
+            if (environment == null)
+            {
+                throw new ArgumentNullException(nameof(environment));
+            }
+            if (logger == null)
+            {
+                throw new ArgumentNullException(nameof(logger));
+            }
 
-            var handler = services.GetService<T>();
-            var options = services.GetService<IOptions<JsonRpcOptions>>();
-            var loggerFactory = services.GetService<ILoggerFactory>();
-
-            _handler = handler ?? ActivatorUtilities.CreateInstance<T>(services);
-            _serializer = new JsonRpcSerializer(CreateJsonRpcContractResolver(_handler), options?.Value?.JsonSerializer);
-            _logger = loggerFactory?.CreateLogger<JsonRpcMiddleware<T>>();
+            _environment = environment;
+            _logger = logger;
+            _handler = services.GetService<T>() ?? ActivatorUtilities.CreateInstance<T>(services);
+            _serializer = new JsonRpcSerializer(CreateJsonRpcContractResolver(_handler), services.GetService<IOptions<JsonRpcOptions>>()?.Value?.JsonSerializer);
         }
 
-        private static IReadOnlyDictionary<string, Encoding> CreateSupportedEncodings()
+        private static Dictionary<string, Encoding> CreateSupportedEncodings()
         {
             return new Dictionary<string, Encoding>(StringComparer.OrdinalIgnoreCase)
             {
@@ -59,6 +75,47 @@ namespace Anemonis.AspNetCore.JsonRpc
                 [Encoding.Unicode.WebName] = new UnicodeEncoding(false, false, true),
                 [Encoding.UTF32.WebName] = new UTF32Encoding(false, false, true)
             };
+        }
+
+        private static Dictionary<long, JsonRpcError> CreateStandardJsonRpcErrors()
+        {
+            return new Dictionary<long, JsonRpcError>
+            {
+                [JsonRpcErrorCode.InvalidFormat] =
+                    new JsonRpcError(JsonRpcErrorCode.InvalidFormat, Strings.GetString("rpc.error.invalid_format")),
+                [JsonRpcErrorCode.InvalidOperation] =
+                    new JsonRpcError(JsonRpcErrorCode.InvalidOperation, Strings.GetString("rpc.error.invalid_operation")),
+                [JsonRpcErrorCode.InvalidParameters] =
+                    new JsonRpcError(JsonRpcErrorCode.InvalidParameters, Strings.GetString("rpc.error.invalid_parameters")),
+                [JsonRpcErrorCode.InvalidMethod] =
+                    new JsonRpcError(JsonRpcErrorCode.InvalidMethod, Strings.GetString("rpc.error.invalid_method")),
+                [JsonRpcErrorCode.InvalidMessage] =
+                    new JsonRpcError(JsonRpcErrorCode.InvalidMessage, Strings.GetString("rpc.error.invalid_message")),
+                [JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers] =
+                    new JsonRpcError(JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers, Strings.GetString("rpc.error.batch_has_duplicate_identifiers"))
+            };
+        }
+
+        private static Dictionary<long, JsonRpcResponse> CreateStandardJsonRpcResponses(IReadOnlyDictionary<long, JsonRpcError> standardJsonRpcErrors)
+        {
+            return new Dictionary<long, JsonRpcResponse>
+            {
+                [JsonRpcErrorCode.InvalidFormat] =
+                    new JsonRpcResponse(default, standardJsonRpcErrors[JsonRpcErrorCode.InvalidFormat]),
+                [JsonRpcErrorCode.InvalidOperation] =
+                    new JsonRpcResponse(default, standardJsonRpcErrors[JsonRpcErrorCode.InvalidOperation]),
+                [JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers] =
+                    new JsonRpcResponse(default, standardJsonRpcErrors[JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers])
+            };
+        }
+
+        private static bool IsReservedErrorCode(long code)
+        {
+            return
+                (code == JsonRpcErrorCode.InvalidFormat) ||
+                (code == JsonRpcErrorCode.InvalidMethod) ||
+                (code == JsonRpcErrorCode.InvalidMessage) ||
+                (code == JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers);
         }
 
         private static JsonRpcContractResolver CreateJsonRpcContractResolver(T handler)
@@ -70,11 +127,11 @@ namespace Anemonis.AspNetCore.JsonRpc
             {
                 if (kvp.Key == null)
                 {
-                    throw new InvalidOperationException(Strings.GetString("handler.contract.method.undefined_name"));
+                    throw new InvalidOperationException(Strings.GetString("handler.contract.method_name.invalid_value"));
                 }
                 if (JsonRpcProtocol.IsSystemMethod(kvp.Key))
                 {
-                    throw new InvalidOperationException(string.Format(Strings.GetString("handler.contract.method.system_name"), kvp.Key));
+                    throw new InvalidOperationException(string.Format(Strings.GetString("handler.contract.method_name.reserved_prefix"), kvp.Key));
                 }
 
                 resolver.AddRequestContract(kvp.Key, kvp.Value);
@@ -83,38 +140,12 @@ namespace Anemonis.AspNetCore.JsonRpc
             return resolver;
         }
 
-        private static IReadOnlyDictionary<long, JsonRpcError> CreateStandardJsonRpcErrors()
-        {
-            return new Dictionary<long, JsonRpcError>(5)
-            {
-                [JsonRpcErrorCode.InvalidFormat] = new JsonRpcError(JsonRpcErrorCode.InvalidFormat, Strings.GetString("rpc.error.invalid_format")),
-                [JsonRpcErrorCode.InvalidOperation] = new JsonRpcError(JsonRpcErrorCode.InvalidOperation, Strings.GetString("rpc.error.invalid_operation")),
-                [JsonRpcErrorCode.InvalidParameters] = new JsonRpcError(JsonRpcErrorCode.InvalidParameters, Strings.GetString("rpc.error.invalid_parameters")),
-                [JsonRpcErrorCode.InvalidMethod] = new JsonRpcError(JsonRpcErrorCode.InvalidMethod, Strings.GetString("rpc.error.invalid_method")),
-                [JsonRpcErrorCode.InvalidMessage] = new JsonRpcError(JsonRpcErrorCode.InvalidMessage, Strings.GetString("rpc.error.invalid_message"))
-            };
-        }
-
-        private static JsonRpcError ConvertExceptionToJsonRpcError(JsonRpcSerializationException exception)
-        {
-            if (!_standardJsonRpcErrors.TryGetValue(exception.ErrorCode, out var jsonRpcError))
-            {
-                jsonRpcError = new JsonRpcError(exception.ErrorCode, Strings.GetString("rpc.error.invalid_operation"));
-            }
-
-            return jsonRpcError;
-        }
-
         /// <summary>Handles an HTTP request as an asynchronous operation.</summary>
         /// <param name="context">The <see cref="HttpContext" /> instance for the current request.</param>
         /// <param name="next">The delegate representing the remaining middleware in the request pipeline.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if (context.Response.HasStarted)
-            {
-                return;
-            }
             if (!string.Equals(context.Request.Method, HttpMethods.Post, StringComparison.OrdinalIgnoreCase))
             {
                 context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
@@ -143,7 +174,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 return;
             }
-            if (!contentTypeHeaderValue.MediaType.Equals(_mediaTypeValue, StringComparison.OrdinalIgnoreCase))
+            if (!contentTypeHeaderValue.MediaType.Equals(MediaTypes.ApplicationJson, StringComparison.OrdinalIgnoreCase))
             {
                 context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
 
@@ -167,7 +198,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 return;
             }
-            if (!acceptTypeHeaderValue.MediaType.Equals(_mediaTypeValue, StringComparison.OrdinalIgnoreCase))
+            if (!acceptTypeHeaderValue.MediaType.Equals(MediaTypes.ApplicationJson, StringComparison.OrdinalIgnoreCase))
             {
                 context.Response.StatusCode = StatusCodes.Status406NotAcceptable;
 
@@ -200,10 +231,14 @@ namespace Anemonis.AspNetCore.JsonRpc
             }
             catch (JsonException e)
             {
-                _logger?.LogError(4000, e, Strings.GetString("handler.request_data.declined"), context.TraceIdentifier, context.Request.PathBase);
+                _logger.LogDataIsInvalid(e);
 
-                var jsonRpcError = new JsonRpcError(JsonRpcErrorCode.InvalidFormat, Strings.GetString("rpc.error.invalid_format"));
-                var jsonRpcResponse = new JsonRpcResponse(default, jsonRpcError);
+                var jsonRpcResponse = _standardJsonRpcResponses[JsonRpcErrorCode.InvalidFormat];
+
+                if (_environment.IsDevelopment())
+                {
+                    jsonRpcResponse = new JsonRpcResponse(default, new JsonRpcError(jsonRpcResponse.Error.Code, jsonRpcResponse.Error.Message, e.ToString()));
+                }
 
                 context.Response.StatusCode = StatusCodes.Status200OK;
 
@@ -213,10 +248,14 @@ namespace Anemonis.AspNetCore.JsonRpc
             }
             catch (JsonRpcSerializationException e)
             {
-                _logger?.LogError(4000, e, Strings.GetString("handler.request_data.declined"), context.TraceIdentifier, context.Request.PathBase);
+                _logger.LogDataIsInvalid(e);
 
-                var jsonRpcError = ConvertExceptionToJsonRpcError(e);
-                var jsonRpcResponse = new JsonRpcResponse(default, jsonRpcError);
+                var jsonRpcResponse = _standardJsonRpcResponses[JsonRpcErrorCode.InvalidOperation];
+
+                if (_environment.IsDevelopment())
+                {
+                    jsonRpcResponse = new JsonRpcResponse(default, new JsonRpcError(jsonRpcResponse.Error.Code, jsonRpcResponse.Error.Message, e.ToString()));
+                }
 
                 context.Response.StatusCode = StatusCodes.Status200OK;
 
@@ -229,11 +268,11 @@ namespace Anemonis.AspNetCore.JsonRpc
             {
                 var jsonRpcRequestItem = jsonRpcRequestData.Item;
 
-                _logger?.LogDebug(1000, Strings.GetString("handler.request_data.accepted_single"), context.TraceIdentifier, context.Request.PathBase);
+                _logger.LogDataIsMessage();
 
                 context.RequestAborted.ThrowIfCancellationRequested();
 
-                var jsonRpcResponse = await CreateJsonRpcResponseAsync(context, jsonRpcRequestItem);
+                var jsonRpcResponse = await CreateJsonRpcResponseAsync(jsonRpcRequestItem, 0);
 
                 if (jsonRpcResponse == null)
                 {
@@ -248,7 +287,6 @@ namespace Anemonis.AspNetCore.JsonRpc
                     return;
                 }
 
-                context.RequestAborted.ThrowIfCancellationRequested();
                 context.Response.StatusCode = StatusCodes.Status200OK;
 
                 await SerializeJsonRpcResponseAsync(context, jsonRpcResponse, responseStreamEncoding);
@@ -257,17 +295,9 @@ namespace Anemonis.AspNetCore.JsonRpc
             {
                 var jsonRpcRequestItems = jsonRpcRequestData.Items;
 
-                _logger?.LogDebug(1010, Strings.GetString("handler.request_data.accepted_batch"), context.TraceIdentifier, jsonRpcRequestItems.Count, context.Request.PathBase);
-
-#if NETCOREAPP2_1
-
-                var jsonRpcRequestIdentifiers = new HashSet<JsonRpcId>(jsonRpcRequestItems.Count);
-
-#else
+                _logger.LogDataIsBatch(jsonRpcRequestItems.Count);
 
                 var jsonRpcRequestIdentifiers = new HashSet<JsonRpcId>();
-
-#endif
 
                 for (var i = 0; i < jsonRpcRequestItems.Count; i++)
                 {
@@ -277,10 +307,9 @@ namespace Anemonis.AspNetCore.JsonRpc
                     {
                         if (!jsonRpcRequestIdentifiers.Add(jsonRpcRequestItem.Message.Id))
                         {
-                            _logger?.LogError(4020, Strings.GetString("handler.request_data.duplicate_ids"), context.TraceIdentifier);
+                            _logger.LogBatchHasDuplicateIdentifiers();
 
-                            var jsonRpcError = new JsonRpcError(-32000L, Strings.GetString("rpc.error.duplicate_ids"));
-                            var jsonRpcResponse = new JsonRpcResponse(default, jsonRpcError);
+                            var jsonRpcResponse = _standardJsonRpcResponses[JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers];
 
                             context.Response.StatusCode = StatusCodes.Status200OK;
 
@@ -298,7 +327,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                     context.RequestAborted.ThrowIfCancellationRequested();
 
                     var jsonRpcRequestItem = jsonRpcRequestItems[i];
-                    var jsonRpcResponse = await CreateJsonRpcResponseAsync(context, jsonRpcRequestItem);
+                    var jsonRpcResponse = await CreateJsonRpcResponseAsync(jsonRpcRequestItem, i);
 
                     if (jsonRpcResponse != null)
                     {
@@ -320,7 +349,6 @@ namespace Anemonis.AspNetCore.JsonRpc
                     return;
                 }
 
-                context.RequestAborted.ThrowIfCancellationRequested();
                 context.Response.StatusCode = StatusCodes.Status200OK;
 
                 await SerializeJsonRpcResponsesAsync(context, jsonRpcResponses, responseStreamEncoding);
@@ -363,15 +391,22 @@ namespace Anemonis.AspNetCore.JsonRpc
             }
         }
 
-        private async Task<JsonRpcResponse> CreateJsonRpcResponseAsync(HttpContext context, JsonRpcMessageInfo<JsonRpcRequest> requestInfo)
+        private async Task<JsonRpcResponse> CreateJsonRpcResponseAsync(JsonRpcMessageInfo<JsonRpcRequest> requestInfo, int index)
         {
             if (!requestInfo.IsValid)
             {
                 var exception = requestInfo.Exception;
 
-                _logger?.LogError(4010, exception, Strings.GetString("handler.request.invalid_message"), context.TraceIdentifier, exception.MessageId);
+                _logger.LogRequestIsInvalid(index, exception);
 
-                return new JsonRpcResponse(exception.MessageId, ConvertExceptionToJsonRpcError(exception));
+                var jsonRpcError = _standardJsonRpcErrors[exception.ErrorCode];
+
+                if (_environment.IsDevelopment())
+                {
+                    jsonRpcError = new JsonRpcError(jsonRpcError.Code, jsonRpcError.Message, exception.ToString());
+                }
+
+                return new JsonRpcResponse(exception.MessageId, jsonRpcError);
             }
 
             var request = requestInfo.Message;
@@ -384,29 +419,37 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 if (requestId != responseId)
                 {
-                    throw new InvalidOperationException(Strings.GetString("handler.response.invalid_id"));
+                    throw new InvalidOperationException(Strings.GetString("handler.invalid_response_id"));
+                }
+
+                if (!response.Success)
+                {
+                    if (IsReservedErrorCode(response.Error.Code))
+                    {
+                        throw new InvalidOperationException(Strings.GetString("handler.invalid_error_code"));
+                    }
                 }
 
                 if (!request.IsNotification)
                 {
                     if (response.Success)
                     {
-                        _logger?.LogInformation(2010, Strings.GetString("handler.response.handled_with_result"), context.TraceIdentifier, requestId, request.Method);
+                        _logger.LogHandledRequestWithResultSuccessfully(index);
                     }
                     else
                     {
-                        _logger?.LogInformation(2020, Strings.GetString("handler.response.handled_with_error"), context.TraceIdentifier, requestId, request.Method, response.Error.Code, response.Error.Message);
+                        _logger.LogHandledRequestWithErrorSuccessfully(response.Error.Code, index);
                     }
                 }
                 else
                 {
                     if (response.Success)
                     {
-                        _logger?.LogInformation(2030, Strings.GetString("handler.response.handled_with_result_as_notification"), context.TraceIdentifier, request.Method);
+                        _logger.LogHandledRequestWithResultAsNotification(index);
                     }
                     else
                     {
-                        _logger?.LogInformation(2040, Strings.GetString("handler.response.handled_with_error_as_notification"), context.TraceIdentifier, request.Method, response.Error.Code, response.Error.Message);
+                        _logger.LogHandledRequestWithErrorAsNotification(response.Error.Code, index);
                     }
                 }
             }
@@ -414,11 +457,11 @@ namespace Anemonis.AspNetCore.JsonRpc
             {
                 if (request.IsNotification)
                 {
-                    _logger?.LogInformation(2000, Strings.GetString("handler.response.handled_notification"), context.TraceIdentifier, request.Method);
+                    _logger.LogHandledNotificationSuccessfully(index);
                 }
                 else
                 {
-                    _logger?.LogWarning(3000, Strings.GetString("handler.response.handled_notification_as_response"), context.TraceIdentifier, requestId, request.Method);
+                    _logger.LogHandledNotificationAsRequest(index);
                 }
             }
 

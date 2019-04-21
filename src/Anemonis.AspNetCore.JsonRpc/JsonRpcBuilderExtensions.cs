@@ -2,10 +2,10 @@
 
 using System;
 using System.Reflection;
-using Microsoft.AspNetCore.Builder;
+using Anemonis.AspNetCore.JsonRpc;
 using Microsoft.AspNetCore.Http;
 
-namespace Anemonis.AspNetCore.JsonRpc
+namespace Microsoft.AspNetCore.Builder
 {
     /// <summary>The JSON-RPC 2.0 middleware extensions for the <see cref="IApplicationBuilder" />.</summary>
     public static class JsonRpcBuilderExtensions
