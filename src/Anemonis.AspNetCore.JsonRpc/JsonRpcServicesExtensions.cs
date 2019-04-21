@@ -2,9 +2,10 @@
 
 using System;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
+using Anemonis.AspNetCore.JsonRpc;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Anemonis.AspNetCore.JsonRpc
+namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>The JSON-RPC 2.0 middleware extensions for the <see cref="IServiceCollection" />.</summary>
     public static class JsonRpcServicesExtensions
@@ -30,7 +31,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
             var middlewareType = typeof(JsonRpcMiddleware<>).MakeGenericType(type);
 
-            services.AddScoped(middlewareType, middlewareType);
+            services.TryAddScoped(middlewareType, middlewareType);
 
             return services;
         }
@@ -48,7 +49,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.AddScoped<JsonRpcMiddleware<T>, JsonRpcMiddleware<T>>();
+            services.TryAddScoped<JsonRpcMiddleware<T>, JsonRpcMiddleware<T>>();
 
             return services;
         }
@@ -77,7 +78,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 var middlewareType = typeof(JsonRpcMiddleware<>).MakeGenericType(types[i]);
 
-                services.AddScoped(middlewareType, middlewareType);
+                services.TryAddScoped(middlewareType, middlewareType);
             }
 
             return services;
@@ -104,7 +105,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
             var middlewareType = typeof(JsonRpcMiddleware<>).MakeGenericType(typeof(JsonRpcServiceHandler<>).MakeGenericType(type));
 
-            services.AddScoped(middlewareType, middlewareType);
+            services.TryAddScoped(middlewareType, middlewareType);
 
             return services;
         }
@@ -122,7 +123,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                 throw new ArgumentNullException(nameof(services));
             }
 
-            services.AddScoped<JsonRpcMiddleware<JsonRpcServiceHandler<T>>, JsonRpcMiddleware<JsonRpcServiceHandler<T>>>();
+            services.TryAddScoped<JsonRpcMiddleware<JsonRpcServiceHandler<T>>, JsonRpcMiddleware<JsonRpcServiceHandler<T>>>();
 
             return services;
         }
@@ -151,7 +152,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 var middlewareType = typeof(JsonRpcMiddleware<>).MakeGenericType(typeof(JsonRpcServiceHandler<>).MakeGenericType(types[i]));
 
-                services.AddScoped(middlewareType, middlewareType);
+                services.TryAddScoped(middlewareType, middlewareType);
             }
 
             return services;
@@ -176,30 +177,25 @@ namespace Anemonis.AspNetCore.JsonRpc
 
         /// <summary>Adds JSON-RPC 2.0 handlers and services from the current application domain to the current <see cref="IServiceCollection" /> instance.</summary>
         /// <param name="services">The <see cref="IServiceCollection" /> instance to add the handler to.</param>
-        /// <param name="options">The middleware options to add to the current <see cref="IServiceCollection" /> instance.</param>
+        /// <param name="configureOptions">The delegate to configure a <see cref="JsonRpcOptions" />.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="services" /> or <paramref name="options" /> is <see langword="null" />.</exception>
-        public static IServiceCollection AddJsonRpc(this IServiceCollection services, JsonRpcOptions options)
+        /// <exception cref="ArgumentNullException"><paramref name="services" /> or <paramref name="configureOptions" /> is <see langword="null" />.</exception>
+        public static IServiceCollection AddJsonRpc(this IServiceCollection services, Action<JsonRpcOptions> configureOptions)
         {
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
-            if (options == null)
+            if (configureOptions == null)
             {
-                throw new ArgumentNullException(nameof(options));
+                throw new ArgumentNullException(nameof(configureOptions));
             }
 
-            services.Configure<JsonRpcOptions>(o => ApplyOptions(options, o));
+            services.Configure(configureOptions);
             services.AddJsonRpcHandlers();
             services.AddJsonRpcServices();
 
             return services;
-        }
-
-        private static void ApplyOptions(JsonRpcOptions source, JsonRpcOptions target)
-        {
-            target.JsonSerializer = source.JsonSerializer;
         }
     }
 }

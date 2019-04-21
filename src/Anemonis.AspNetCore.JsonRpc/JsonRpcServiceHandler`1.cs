@@ -212,11 +212,6 @@ namespace Anemonis.AspNetCore.JsonRpc
                                 }
                                 else
                                 {
-                                    if (request.IsNotification)
-                                    {
-                                        return null;
-                                    }
-
                                     var message = string.Format(Strings.GetString("service.request.parameter.undefined_value"), request.Method, methodInfo.ParameterNames[i]);
 
                                     return new JsonRpcResponse(requestId, new JsonRpcError(JsonRpcErrorCode.InvalidParameters, message));

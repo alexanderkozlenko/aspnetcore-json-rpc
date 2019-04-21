@@ -49,6 +49,8 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
         {
             var servicesMock = new Mock<IServiceCollection>(MockBehavior.Strict);
 
+            servicesMock.Setup(o => o.GetEnumerator())
+                .Returns(new List<ServiceDescriptor>().GetEnumerator());
             servicesMock.Setup(o => o.Add(It.IsNotNull<ServiceDescriptor>()));
 
             JsonRpcServicesExtensions.AddJsonRpcHandler(servicesMock.Object, typeof(JsonRpcTestHandler1));
@@ -68,6 +70,8 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
         {
             var servicesMock = new Mock<IServiceCollection>(MockBehavior.Strict);
 
+            servicesMock.Setup(o => o.GetEnumerator())
+                .Returns(new List<ServiceDescriptor>().GetEnumerator());
             servicesMock.Setup(o => o.Add(It.IsNotNull<ServiceDescriptor>()));
 
             JsonRpcServicesExtensions.AddJsonRpcHandler<JsonRpcTestHandler1>(servicesMock.Object);
@@ -87,6 +91,8 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
         {
             var servicesMock = new Mock<IServiceCollection>(MockBehavior.Strict);
 
+            servicesMock.Setup(o => o.GetEnumerator())
+                .Returns(new List<ServiceDescriptor>().GetEnumerator());
             servicesMock.Setup(o => o.Add(It.IsNotNull<ServiceDescriptor>()));
 
             JsonRpcServicesExtensions.AddJsonRpcHandlers(servicesMock.Object);
@@ -131,6 +137,8 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
         {
             var servicesMock = new Mock<IServiceCollection>(MockBehavior.Strict);
 
+            servicesMock.Setup(o => o.GetEnumerator())
+                .Returns(new List<ServiceDescriptor>().GetEnumerator());
             servicesMock.Setup(o => o.Add(It.IsNotNull<ServiceDescriptor>()));
 
             JsonRpcServicesExtensions.AddJsonRpcService(servicesMock.Object, typeof(JsonRpcTestService1));
@@ -150,6 +158,8 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
         {
             var servicesMock = new Mock<IServiceCollection>(MockBehavior.Strict);
 
+            servicesMock.Setup(o => o.GetEnumerator())
+                .Returns(new List<ServiceDescriptor>().GetEnumerator());
             servicesMock.Setup(o => o.Add(It.IsNotNull<ServiceDescriptor>()));
 
             JsonRpcServicesExtensions.AddJsonRpcService<JsonRpcTestService1>(servicesMock.Object);
@@ -169,6 +179,8 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
         {
             var servicesMock = new Mock<IServiceCollection>(MockBehavior.Strict);
 
+            servicesMock.Setup(o => o.GetEnumerator())
+                .Returns(new List<ServiceDescriptor>().GetEnumerator());
             servicesMock.Setup(o => o.Add(It.IsNotNull<ServiceDescriptor>()));
 
             JsonRpcServicesExtensions.AddJsonRpcServices(servicesMock.Object);
@@ -178,7 +190,7 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
         public void AddJsonRpcWithWithServicesAndOptionsWhenServicesIsNull()
         {
             Assert.ThrowsException<ArgumentNullException>(() =>
-                JsonRpcServicesExtensions.AddJsonRpc(null, new JsonRpcOptions()));
+                JsonRpcServicesExtensions.AddJsonRpc(null, co => { }));
         }
 
         [TestMethod]
@@ -199,7 +211,7 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(new List<ServiceDescriptor>().GetEnumerator());
             servicesMock.Setup(o => o.Add(It.IsNotNull<ServiceDescriptor>()));
 
-            JsonRpcServicesExtensions.AddJsonRpc(servicesMock.Object, new JsonRpcOptions());
+            JsonRpcServicesExtensions.AddJsonRpc(servicesMock.Object, co => { });
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs
 {
-    internal sealed class JsonRpcTestService1 : IJsonRpcService, IDisposable
+    public sealed class JsonRpcTestService1 : IJsonRpcService, IDisposable
     {
         public void Dispose()
         {

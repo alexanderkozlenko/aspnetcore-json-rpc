@@ -9,7 +9,7 @@
 ## Project Details
 
 - The middleware transparently handles batch JSON-RPC requests.
-- The middleware automatically handles common JSON-RPC issues.
+- The middleware automatically handles standard JSON-RPC errors.
 - The middleware does not verify the `Content-Length` header.
 - A service supports default method parameter values for named parameters not provided in a request.
 
@@ -21,25 +21,25 @@ In addition to the standard JSON-RPC error codes the middleware may return the f
 
 In addition to the standard JSON-RPC HTTP error codes the middleware may return the following HTTP error codes:
 
- Code | Reason |
- :---: | --- |
- `415` | The `Content-Encoding` header is specified |
+| Code | Reason |
+| :---: | --- |
+| `415` | The `Content-Encoding` header is specified |
 
 According to the current logging configuration, the following events may appear in a journal:
 
- ID | Level | Reason |
- :---: | --- | --- |
- `1000` | Debug | A JSON-RPC request accepted for processing as a single item |
- `1010` | Debug | A JSON-RPC request accepted for processing as a batch |
- `2000` | Information | A JSON-RPC request processed as notification |
- `2010` | Information | A JSON-RPC request processed with result |
- `2020` | Information | A JSON-RPC request processed with error |
- `2030` | Information | A JSON-RPC request processed with result as notification due to client  demand |
- `2040` | Information | A JSON-RPC request processed with error as notification due to client  demand |
- `3000` | Warning | A JSON-RPC request processed as notification due to server configuration |
- `4000` | Error | An error occurred during deserialization of a JSON-RPC request |
- `4010` | Error | A JSON-RPC request is not considered as a valid JSON-RPC message |
- `4020` | Error | A JSON-RPC batch contains requests with duplicate identifiers |
+| ID | Level | Reason |
+| :---: | :---: | --- |
+| `1000` | `Trace` | The request contains a single JSON-RPC message |
+| `1001` | `Trace` | The request contains a JSON-RPC batch |
+| `1100` | `Debug` | A JSON-RPC notification handled successfully |
+| `1110` | `Debug` | A JSON-RPC request handled with result successfully |
+| `1111` | `Debug` | A JSON-RPC request handled with error successfully |
+| `1200` | `Information` | A JSON-RPC request handled with result as notification due to client demand |
+| `1201` | `Information` | A JSON-RPC request handled with error as notification due to client demand |
+| `1300` | `Warning` | A JSON-RPC notification handled as request due to server configuration |
+| `1400` | `Error` | The request contains invalid JSON-RPC data |
+| `1401` | `Error` | A JSON-RPC request is invalid |
+| `1402` | `Error` | The request contains a JSON-RPC batch with duplicate identifiers |
 
 ## Code Examples
 
