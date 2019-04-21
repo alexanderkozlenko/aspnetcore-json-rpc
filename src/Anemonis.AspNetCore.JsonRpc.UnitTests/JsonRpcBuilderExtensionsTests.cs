@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+
 using Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using Moq;
 
 namespace Anemonis.AspNetCore.JsonRpc.UnitTests

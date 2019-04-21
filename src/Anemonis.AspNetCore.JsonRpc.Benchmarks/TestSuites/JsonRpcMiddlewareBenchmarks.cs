@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+
 using Anemonis.AspNetCore.JsonRpc.Benchmarks.Resources;
 using Anemonis.AspNetCore.JsonRpc.Benchmarks.TestStubs;
+
 using BenchmarkDotNet.Attributes;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

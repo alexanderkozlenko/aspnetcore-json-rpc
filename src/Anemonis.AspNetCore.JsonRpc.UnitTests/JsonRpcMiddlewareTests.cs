@@ -3,15 +3,19 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+
 using Anemonis.AspNetCore.JsonRpc.UnitTests.Resources;
 using Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using Moq;
+
 using Newtonsoft.Json.Linq;
 
 namespace Anemonis.AspNetCore.JsonRpc.UnitTests

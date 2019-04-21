@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Loggers;
 using BenchmarkDotNet.Reports;

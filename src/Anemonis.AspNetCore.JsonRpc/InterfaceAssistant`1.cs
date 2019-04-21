@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+
 using Anemonis.AspNetCore.JsonRpc.Resources;
 
 namespace Anemonis.AspNetCore.JsonRpc

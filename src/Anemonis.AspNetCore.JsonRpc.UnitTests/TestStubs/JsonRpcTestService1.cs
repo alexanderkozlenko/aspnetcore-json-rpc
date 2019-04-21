@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+#pragma warning disable IDE0060
+
 namespace Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs
 {
     public sealed class JsonRpcTestService1 : IJsonRpcService, IDisposable
@@ -121,3 +123,5 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs
         public event EventHandler<EventArgs> Disposed;
     }
 }
+
+#pragma warning restore IDE0060

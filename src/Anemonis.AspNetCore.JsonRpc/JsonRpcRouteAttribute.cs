@@ -1,6 +1,7 @@
 ﻿// © Alexander Kozlenko. Licensed under the MIT License.
 
 using System;
+
 using Microsoft.AspNetCore.Http;
 
 namespace Anemonis.AspNetCore.JsonRpc

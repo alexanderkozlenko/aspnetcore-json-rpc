@@ -6,8 +6,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
+
 using Anemonis.AspNetCore.JsonRpc.Resources;
 using Anemonis.JsonRpc;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Anemonis.AspNetCore.JsonRpc

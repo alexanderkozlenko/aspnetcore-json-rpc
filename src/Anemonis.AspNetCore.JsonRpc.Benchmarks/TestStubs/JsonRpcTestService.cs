@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 
+#pragma warning disable IDE0060
+
 namespace Anemonis.AspNetCore.JsonRpc.Benchmarks.TestStubs
 {
     internal sealed class JsonRpcTestService : IJsonRpcService
@@ -113,3 +115,5 @@ namespace Anemonis.AspNetCore.JsonRpc.Benchmarks.TestStubs
         }
     }
 }
+
+#pragma warning restore IDE0060

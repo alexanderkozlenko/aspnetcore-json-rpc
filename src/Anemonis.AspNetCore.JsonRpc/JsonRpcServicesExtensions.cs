@@ -2,7 +2,9 @@
 
 using System;
 using System.Reflection;
+
 using Anemonis.AspNetCore.JsonRpc;
+
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection

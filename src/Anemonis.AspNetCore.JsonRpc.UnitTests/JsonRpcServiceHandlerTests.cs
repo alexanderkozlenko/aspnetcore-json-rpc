@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs;
 using Anemonis.JsonRpc;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using Moq;
 
 namespace Anemonis.AspNetCore.JsonRpc.UnitTests
@@ -224,10 +227,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new List<object>();
 
-            jsonRpcParams.Add(1L);
-            jsonRpcParams.Add("!");
+            var jsonRpcParams = new List<object>
+            {
+                1L,
+                "!"
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t0p1e0d0", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -244,10 +249,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new List<object>();
 
-            jsonRpcParams.Add(1L);
-            jsonRpcParams.Add("!");
+            var jsonRpcParams = new List<object>
+            {
+                1L,
+                "!"
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t0p1e1d0", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -268,10 +275,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new List<object>();
 
-            jsonRpcParams.Add(1L);
-            jsonRpcParams.Add("!");
+            var jsonRpcParams = new List<object>
+            {
+                1L,
+                "!"
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t0p1e1d1", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -293,10 +302,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new Dictionary<string, object>();
 
-            jsonRpcParams.Add("p0", 1L);
-            jsonRpcParams.Add("p1", "!");
+            var jsonRpcParams = new Dictionary<string, object>
+            {
+                { "p0", 1L },
+                { "p1", "!" }
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t0p2e0d0", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -313,10 +324,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new Dictionary<string, object>();
 
-            jsonRpcParams.Add("p0", 1L);
-            jsonRpcParams.Add("p1", "!");
+            var jsonRpcParams = new Dictionary<string, object>
+            {
+                { "p0", 1L },
+                { "p1", "!" }
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t0p2e1d0", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -337,10 +350,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new Dictionary<string, object>();
 
-            jsonRpcParams.Add("p0", 1L);
-            jsonRpcParams.Add("p1", "!");
+            var jsonRpcParams = new Dictionary<string, object>
+            {
+                { "p0", 1L },
+                { "p1", "!" }
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t0p2e1d1", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -416,10 +431,11 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new List<object>();
-
-            jsonRpcParams.Add(1L);
-            jsonRpcParams.Add("!");
+            var jsonRpcParams = new List<object>
+            {
+                1L,
+                "!"
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t1p1e0d0", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -438,10 +454,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new List<object>();
 
-            jsonRpcParams.Add(1L);
-            jsonRpcParams.Add("!");
+            var jsonRpcParams = new List<object>
+            {
+                1L,
+                "!"
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t1p1e1d0", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -462,10 +480,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new List<object>();
 
-            jsonRpcParams.Add(1L);
-            jsonRpcParams.Add("!");
+            var jsonRpcParams = new List<object>
+            {
+                1L,
+                "!"
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t1p1e1d1", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -487,10 +507,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new Dictionary<string, object>();
 
-            jsonRpcParams.Add("p0", 1L);
-            jsonRpcParams.Add("p1", "!");
+            var jsonRpcParams = new Dictionary<string, object>
+            {
+                { "p0", 1L },
+                { "p1", "!" }
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t1p2e0d0", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -509,10 +531,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new Dictionary<string, object>();
 
-            jsonRpcParams.Add("p0", 1L);
-            jsonRpcParams.Add("p1", "!");
+            var jsonRpcParams = new Dictionary<string, object>
+            {
+                { "p0", 1L },
+                { "p1", "!" }
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t1p2e1d0", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);
@@ -533,10 +557,12 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
                 .Returns(null);
 
             var jsonRpcServiceHandler = new JsonRpcServiceHandler<JsonRpcTestService1>(serviceProviderMock.Object);
-            var jsonRpcParams = new Dictionary<string, object>();
 
-            jsonRpcParams.Add("p0", 1L);
-            jsonRpcParams.Add("p1", "!");
+            var jsonRpcParams = new Dictionary<string, object>
+            {
+                { "p0", 1L },
+                { "p1", "!" }
+            };
 
             var jsonRpcRequest = new JsonRpcRequest(0L, "t1p2e1d1", jsonRpcParams);
             var jsonRpcResponse = await jsonRpcServiceHandler.HandleAsync(jsonRpcRequest);

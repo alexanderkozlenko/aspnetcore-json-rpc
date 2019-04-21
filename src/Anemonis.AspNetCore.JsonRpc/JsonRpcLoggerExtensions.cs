@@ -1,7 +1,9 @@
 ﻿// © Alexander Kozlenko. Licensed under the MIT License.
 
 using System;
+
 using Anemonis.AspNetCore.JsonRpc.Resources;
+
 using Microsoft.Extensions.Logging;
 
 namespace Anemonis.AspNetCore.JsonRpc
