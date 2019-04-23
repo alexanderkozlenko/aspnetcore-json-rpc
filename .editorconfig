@@ -8,6 +8,8 @@ indent_size = 2
 
 [*.cs]
 
+insert_final_newline = true
+trim_trailing_whitespace = true
 indent_size = 4
 
 dotnet_style_qualification_for_field = false:warning
@@ -81,10 +83,28 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false
 csharp_preserve_single_line_statements = false
 csharp_preserve_single_line_blocks = false
 
-dotnet_naming_symbols.private_field.applicable_kinds = field
-dotnet_naming_symbols.private_field.applicable_accessibilities = private
-dotnet_naming_style.camel_case_and_prefix_with_underscore.required_prefix = _
-dotnet_naming_style.camel_case_and_prefix_with_underscore.capitalization = camel_case
-dotnet_naming_rule.private_field.symbols = private_field
-dotnet_naming_rule.private_field.style = camel_case_and_prefix_with_underscore
-dotnet_naming_rule.private_field.severity = warning
+dotnet_naming_style.interface_style.capitalization = pascal_case
+dotnet_naming_style.interface_style.required_prefix = I
+dotnet_naming_style.camel_case_with_underscore_style.capitalization = camel_case
+dotnet_naming_style.camel_case_with_underscore_style.required_prefix = _
+dotnet_naming_style.camel_case_style.capitalization = camel_case
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+
+dotnet_naming_symbols.interface_symbols.applicable_kinds = interface
+dotnet_naming_symbols.parameter_and_local_symbols.applicable_kinds = parameter, local
+dotnet_naming_symbols.private_field_symbols.applicable_kinds = field
+dotnet_naming_symbols.private_field_symbols.applicable_accessibilities = private
+dotnet_naming_symbols.any_token_symbols.applicable_kinds = *
+
+dotnet_naming_rule.interface_rule.symbols = interface_symbols
+dotnet_naming_rule.interface_rule.style = interface_style
+dotnet_naming_rule.interface_rule.severity = warning
+dotnet_naming_rule.parameter_and_local_rule.symbols = parameter_and_local_symbols
+dotnet_naming_rule.parameter_and_local_rule.style = camel_case_style
+dotnet_naming_rule.parameter_and_local_rule.severity = warning
+dotnet_naming_rule.private_field_rule.symbols = private_field_symbols
+dotnet_naming_rule.private_field_rule.style = camel_case_with_underscore_style
+dotnet_naming_rule.private_field_rule.severity = warning
+dotnet_naming_rule.any_token_rule.symbols = any_token_symbols
+dotnet_naming_rule.any_token_rule.style = pascal_case_style
+dotnet_naming_rule.any_token_rule.severity = warning
