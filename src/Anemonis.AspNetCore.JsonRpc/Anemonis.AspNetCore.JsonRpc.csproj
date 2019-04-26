@@ -10,12 +10,14 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Anemonis.JsonRpc" Version="1.21.0" />
+    <PackageReference Include="Anemonis.JsonRpc" Version="1.22.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.0" />
+    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.9.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
   </ItemGroup>
 </Project>

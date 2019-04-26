@@ -9,6 +9,21 @@ namespace Anemonis.AspNetCore.JsonRpc
     /// <summary>A JSON-RPC service exception which indicates a JSON-RPC error response.</summary>
     public class JsonRpcServiceException : JsonRpcException
     {
+        internal JsonRpcServiceException()
+            : base()
+        {
+        }
+
+        internal JsonRpcServiceException(string message)
+            : base(message)
+        {
+        }
+
+        internal JsonRpcServiceException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
         /// <summary>Initializes a new instance of the <see cref="JsonRpcServiceException" /> class.</summary>
         /// <param name="code">The number that indicates the error type that occurred.</param>
         /// <param name="message">The message that describes the error.</param>

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ using Microsoft.Net.Http.Headers;
 
 using Newtonsoft.Json;
 
+#pragma warning disable CA2007
+
 namespace Anemonis.AspNetCore.JsonRpc
 {
     /// <summary>Represents a middleware for adding a JSON-RPC handler to the application's request pipeline.</summary>
@@ -28,21 +31,14 @@ namespace Anemonis.AspNetCore.JsonRpc
         private const int _streamBufferSize = 1024;
 
         private static readonly string _contentTypeHeaderValue = $"{MediaTypes.ApplicationJson}; charset=utf-8";
-        private static readonly Dictionary<string, Encoding> _supportedEncodings;
-        private static readonly Dictionary<long, JsonRpcError> _standardJsonRpcErrors;
-        private static readonly Dictionary<long, JsonRpcResponse> _standardJsonRpcResponses;
+        private static readonly Dictionary<string, Encoding> _supportedEncodings = CreateSupportedEncodings();
+        private static readonly Dictionary<long, JsonRpcError> _standardJsonRpcErrors = CreateStandardJsonRpcErrors();
+        private static readonly Dictionary<long, JsonRpcResponse> _standardJsonRpcResponses = CreateStandardJsonRpcResponses();
 
         private readonly IHostingEnvironment _environment;
         private readonly ILogger _logger;
         private readonly T _handler;
         private readonly JsonRpcSerializer _serializer;
-
-        static JsonRpcMiddleware()
-        {
-            _supportedEncodings = CreateSupportedEncodings();
-            _standardJsonRpcErrors = CreateStandardJsonRpcErrors();
-            _standardJsonRpcResponses = CreateStandardJsonRpcResponses(_standardJsonRpcErrors);
-        }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcMiddleware{T}" /> class.</summary>
         /// <param name="services">The <see cref="IServiceProvider" /> instance for retrieving service objects.</param>
@@ -93,22 +89,20 @@ namespace Anemonis.AspNetCore.JsonRpc
                 [JsonRpcErrorCode.InvalidMethod] =
                     new JsonRpcError(JsonRpcErrorCode.InvalidMethod, Strings.GetString("rpc.error.invalid_method")),
                 [JsonRpcErrorCode.InvalidMessage] =
-                    new JsonRpcError(JsonRpcErrorCode.InvalidMessage, Strings.GetString("rpc.error.invalid_message")),
-                [JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers] =
-                    new JsonRpcError(JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers, Strings.GetString("rpc.error.batch_has_duplicate_identifiers"))
+                    new JsonRpcError(JsonRpcErrorCode.InvalidMessage, Strings.GetString("rpc.error.invalid_message"))
             };
         }
 
-        private static Dictionary<long, JsonRpcResponse> CreateStandardJsonRpcResponses(IReadOnlyDictionary<long, JsonRpcError> standardJsonRpcErrors)
+        private static Dictionary<long, JsonRpcResponse> CreateStandardJsonRpcResponses()
         {
             return new Dictionary<long, JsonRpcResponse>
             {
                 [JsonRpcErrorCode.InvalidFormat] =
-                    new JsonRpcResponse(default, standardJsonRpcErrors[JsonRpcErrorCode.InvalidFormat]),
+                    new JsonRpcResponse(default, new JsonRpcError(JsonRpcErrorCode.InvalidFormat, Strings.GetString("rpc.error.invalid_format"))),
                 [JsonRpcErrorCode.InvalidOperation] =
-                    new JsonRpcResponse(default, standardJsonRpcErrors[JsonRpcErrorCode.InvalidOperation]),
+                    new JsonRpcResponse(default, new JsonRpcError(JsonRpcErrorCode.InvalidOperation, Strings.GetString("rpc.error.invalid_operation"))),
                 [JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers] =
-                    new JsonRpcResponse(default, standardJsonRpcErrors[JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers])
+                    new JsonRpcResponse(default, new JsonRpcError(JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers, Strings.GetString("rpc.error.batch_has_duplicate_identifiers")))
             };
         }
 
@@ -134,7 +128,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                 }
                 if (JsonRpcProtocol.IsSystemMethod(kvp.Key))
                 {
-                    throw new InvalidOperationException(string.Format(Strings.GetString("handler.contract.method_name.reserved_prefix"), kvp.Key));
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("handler.contract.method_name.reserved_prefix"), kvp.Key));
                 }
 
                 resolver.AddRequestContract(kvp.Key, kvp.Value);
@@ -478,3 +472,5 @@ namespace Anemonis.AspNetCore.JsonRpc
         }
     }
 }
+
+#pragma warning restore CA2007

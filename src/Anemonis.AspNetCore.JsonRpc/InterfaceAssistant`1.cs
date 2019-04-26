@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 
 using Anemonis.AspNetCore.JsonRpc.Resources;
@@ -38,7 +39,7 @@ namespace Anemonis.AspNetCore.JsonRpc
             }
             if (!typeof(T).IsAssignableFrom(param))
             {
-                throw new ArgumentException(string.Format(Strings.GetString("infrastructure.type_doesnt_implement_interface"), typeof(T)), paramName);
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("infrastructure.type_doesnt_implement_interface"), typeof(T)), paramName);
             }
         }
     }

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
@@ -11,6 +12,8 @@ using Anemonis.AspNetCore.JsonRpc.Resources;
 using Anemonis.JsonRpc;
 
 using Microsoft.Extensions.DependencyInjection;
+
+#pragma warning disable CA1810
 
 namespace Anemonis.AspNetCore.JsonRpc
 {
@@ -86,11 +89,11 @@ namespace Anemonis.AspNetCore.JsonRpc
                 }
                 if (!(method.ReturnType == typeof(Task)) && !(method.ReturnType.IsGenericType && (method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))))
                 {
-                    throw new InvalidOperationException(string.Format(Strings.GetString("service.method.invalid_type"), method.Name, typeof(T)));
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.method.invalid_type"), method.Name, typeof(T)));
                 }
                 if (blueprint.ContainsKey(attribute.MethodName))
                 {
-                    throw new InvalidOperationException(string.Format(Strings.GetString("service.method.invalid_name"), typeof(T), attribute.MethodName));
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.method.invalid_name"), typeof(T), attribute.MethodName));
                 }
 
                 var contract = default(JsonRpcRequestContract);
@@ -105,14 +108,14 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                             if (parameterPositions.Length != parameters.Length)
                             {
-                                throw new InvalidOperationException(string.Format(Strings.GetString("service.method.invalid_parameters_count"), method.Name, typeof(T)));
+                                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.method.invalid_parameters_count"), method.Name, typeof(T)));
                             }
 
                             for (var i = 0; i < parameterPositions.Length; i++)
                             {
                                 if (!parameterPositions.Contains(i))
                                 {
-                                    throw new InvalidOperationException(string.Format(Strings.GetString("service.method.invalid_parameter_positions"), method.Name, typeof(T)));
+                                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.method.invalid_parameter_positions"), method.Name, typeof(T)));
                                 }
                             }
 
@@ -133,11 +136,11 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                             if (parameterNames.Length != parameters.Length)
                             {
-                                throw new InvalidOperationException(string.Format(Strings.GetString("service.method.invalid_parameters_count"), method.Name, typeof(T)));
+                                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.method.invalid_parameters_count"), method.Name, typeof(T)));
                             }
                             if (parameterNames.Length != parameterNames.Distinct(StringComparer.Ordinal).Count())
                             {
-                                throw new InvalidOperationException(string.Format(Strings.GetString("service.method.invalid_parameter_names"), method.Name, typeof(T)));
+                                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.method.invalid_parameter_names"), method.Name, typeof(T)));
                             }
 
                             var contractParameters = new Dictionary<string, Type>(parameters.Length, StringComparer.Ordinal);
@@ -157,7 +160,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                         {
                             if (parameters.Length != 0)
                             {
-                                throw new InvalidOperationException(string.Format(Strings.GetString("service.method.invalid_parameters_count"), method.Name, typeof(T)));
+                                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.method.invalid_parameters_count"), method.Name, typeof(T)));
                             }
 
                             contract = new JsonRpcRequestContract();
@@ -214,7 +217,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                                 }
                                 else
                                 {
-                                    var message = string.Format(Strings.GetString("service.request.parameter.undefined_value"), request.Method, methodInfo.ParameterNames[i]);
+                                    var message = string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.request.parameter.undefined_value"), request.Method, methodInfo.ParameterNames[i]);
 
                                     return new JsonRpcResponse(requestId, new JsonRpcError(JsonRpcErrorCode.InvalidParameters, message));
                                 }
@@ -284,3 +287,5 @@ namespace Anemonis.AspNetCore.JsonRpc
         }
     }
 }
+
+#pragma warning restore CA1810
