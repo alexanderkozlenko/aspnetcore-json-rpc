@@ -10,65 +10,61 @@ namespace Anemonis.AspNetCore.JsonRpc
 {
     internal static class JsonRpcLoggerExtensions
     {
-        private static readonly Action<ILogger, Exception> _logDataIsMessage;
-        private static readonly Action<ILogger, int, Exception> _logDataIsBatch;
-        private static readonly Action<ILogger, int, Exception> _logHandledNotificationSuccessfully;
-        private static readonly Action<ILogger, int, Exception> _logHandledRequestWithResultSuccessfully;
-        private static readonly Action<ILogger, long, int, Exception> _logHandledRequestWithErrorSuccessfully;
-        private static readonly Action<ILogger, int, Exception> _logHandledRequestWithResultAsNotification;
-        private static readonly Action<ILogger, long, int, Exception> _logHandledRequestWithErrorAsNotification;
-        private static readonly Action<ILogger, int, Exception> _logHandledNotificationAsRequest;
-        private static readonly Action<ILogger, Exception> _logDataIsInvalid;
-        private static readonly Action<ILogger, int, Exception> _logRequestIsInvalid;
-        private static readonly Action<ILogger, Exception> _logBatchHasDuplicateIdentifiers;
-
-        static JsonRpcLoggerExtensions()
-        {
-            _logDataIsMessage = LoggerMessage.Define(
+        private static readonly Action<ILogger, Exception> _logDataIsMessage =
+            LoggerMessage.Define(
                 LogLevel.Trace,
                 new EventId(1000, "JSONRPC_DATA_IS_MESSAGE"),
                 Strings.GetString("handler.data_is_message"));
-            _logDataIsBatch = LoggerMessage.Define<int>(
+        private static readonly Action<ILogger, int, Exception> _logDataIsBatch =
+            LoggerMessage.Define<int>(
                 LogLevel.Trace,
                 new EventId(1001, "JSONRPC_DATA_IS_BATCH"),
                 Strings.GetString("handler.data_is_batch"));
-            _logHandledNotificationSuccessfully = LoggerMessage.Define<int>(
+        private static readonly Action<ILogger, int, Exception> _logHandledNotificationSuccessfully =
+            LoggerMessage.Define<int>(
                 LogLevel.Debug,
                 new EventId(1100, "JSONRPC_HANDLED_NOTIFICATION_SUCCESSFULLY"),
                 Strings.GetString("handler.handled_notification_successfully"));
-            _logHandledRequestWithResultSuccessfully = LoggerMessage.Define<int>(
+        private static readonly Action<ILogger, int, Exception> _logHandledRequestWithResultSuccessfully =
+            LoggerMessage.Define<int>(
                 LogLevel.Debug,
                 new EventId(1110, "JSONRPC_HANDLED_REQUEST_WITH_RESULT_SUCCESSFULLY"),
                 Strings.GetString("handler.handled_request_with_result_successfully"));
-            _logHandledRequestWithErrorSuccessfully = LoggerMessage.Define<long, int>(
+        private static readonly Action<ILogger, long, int, Exception> _logHandledRequestWithErrorSuccessfully =
+            LoggerMessage.Define<long, int>(
                 LogLevel.Debug,
                 new EventId(1111, "JSONRPC_HANDLED_REQUEST_WITH_ERROR_SUCCESSFULLY"),
                 Strings.GetString("handler.handled_request_with_error_successfully"));
-            _logHandledRequestWithResultAsNotification = LoggerMessage.Define<int>(
+        private static readonly Action<ILogger, int, Exception> _logHandledRequestWithResultAsNotification =
+            LoggerMessage.Define<int>(
                 LogLevel.Information,
                 new EventId(1200, "JSONRPC_HANDLED_REQUEST_WITH_RESULT_AS_NOTIFICATION"),
                 Strings.GetString("handler.handled_request_with_result_as_notification"));
-            _logHandledRequestWithErrorAsNotification = LoggerMessage.Define<long, int>(
+        private static readonly Action<ILogger, long, int, Exception> _logHandledRequestWithErrorAsNotification =
+            LoggerMessage.Define<long, int>(
                 LogLevel.Information,
                 new EventId(1201, "JSONRPC_HANDLED_REQUEST_WITH_ERROR_AS_NOTIFICATION"),
                 Strings.GetString("handler.handled_request_with_error_as_notification"));
-            _logHandledNotificationAsRequest = LoggerMessage.Define<int>(
+        private static readonly Action<ILogger, int, Exception> _logHandledNotificationAsRequest =
+            LoggerMessage.Define<int>(
                 LogLevel.Warning,
                 new EventId(1300, "JSONRPC_HANDLED_NOTIFICATION_AS_REQUEST"),
                 Strings.GetString("handler.handled_notification_as_request"));
-            _logDataIsInvalid = LoggerMessage.Define(
+        private static readonly Action<ILogger, Exception> _logDataIsInvalid =
+            LoggerMessage.Define(
                 LogLevel.Error,
                 new EventId(1400, "JSONRPC_DATA_INVALID"),
                 Strings.GetString("handler.data_invalid"));
-            _logRequestIsInvalid = LoggerMessage.Define<int>(
+        private static readonly Action<ILogger, int, Exception> _logRequestIsInvalid =
+            LoggerMessage.Define<int>(
                 LogLevel.Error,
                 new EventId(1401, "JSONRPC_REQUEST_INVALID"),
                 Strings.GetString("handler.request_invalid"));
-            _logBatchHasDuplicateIdentifiers = LoggerMessage.Define(
+        private static readonly Action<ILogger, Exception> _logBatchHasDuplicateIdentifiers =
+            LoggerMessage.Define(
                 LogLevel.Error,
                 new EventId(1402, "JSONRPC_BATCH_HAS_DUPLICATE_IDENTIFIERS"),
                 Strings.GetString("handler.batch_has_duplicate_identifiers"));
-        }
 
         public static void LogDataIsMessage(this ILogger logger)
         {
