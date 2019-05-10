@@ -3,7 +3,6 @@
   <PropertyGroup>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <VersionPrefix>1.17.0</VersionPrefix>
-    <VersionSuffix>beta</VersionSuffix>
   </PropertyGroup>
   <PropertyGroup>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

@@ -11,6 +11,13 @@
       <PackageIconUrl>$(PackageIconUrl.Replace('*', 'img/$(PackageId).png'))</PackageIconUrl>
     </PropertyGroup>
   </Target>
+  <Target Name="InitializeTestProperties"
+          BeforeTargets="Test"
+          Condition="'$(IsTestable)' == 'true'">
+    <PropertyGroup>
+      <VSTestResultsDirectory Condition="'$(VSTestResultsDirectory)' == ''">$(BaseOutputPath)\$(Configuration)</VSTestResultsDirectory>
+    </PropertyGroup>
+  </Target>
   <Target Name="Test"
           Condition="'$(IsTestable)' == 'true'">
     <CallTarget Targets="VSTest" />

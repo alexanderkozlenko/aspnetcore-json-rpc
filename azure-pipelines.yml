@@ -1,37 +1,74 @@
 # © Alexander Kozlenko. Licensed under the MIT License.
 
 variables:
-  Project.FilePath: "$(Build.SourcesDirectory)/global.proj"
-  Project.Configuration: "Release"
-steps:
-- task: PowerShell@2
-  inputs:
-    pwsh: true
-    targetType: "inline"
-    script: |
-        Write-Host ("##vso[task.setvariable variable=DotNetCoreSdkVersion;]" + (Get-Content -Raw "$(Build.SourcesDirectory)/global.json" | ConvertFrom-Json)."sdk"."version")
-- task: DotNetCoreInstaller@0
-  inputs:
-    packageType: "sdk"
-    version: "$(DotNetCoreSdkVersion)"
-- task: DotNetCoreCLI@2
-  inputs:
-    command: "custom"
-    custom: "build"
-    arguments: "$(Project.FilePath) --configuration $(Project.Configuration) -property:ContinuousIntegrationBuild=true"
-- task: DotNetCoreCLI@2
-  inputs:
-    command: "custom"
-    custom: "test"
-    arguments: "$(Project.FilePath) --configuration $(Project.Configuration) --no-build --logger trx --results-directory $(Agent.TempDirectory)"
-- task: DotNetCoreCLI@2
-  inputs:
-    command: "custom"
-    custom: "pack"
-    arguments: "$(Project.FilePath) --configuration $(Project.Configuration) --no-build --include-symbols --output $(Build.ArtifactStagingDirectory)"
-- task: PublishTestResults@2
-  inputs:
-    testRunner: "VSTest"
-    testResultsFiles: "**/*.trx"
-    searchFolder: "$(Agent.TempDirectory)"
-- task: PublishBuildArtifacts@1
+- template: azure-pipelines-variables.yml
+- name: 'Build.ProjectPath'
+  value: '$(Build.SourcesDirectory)/global.proj'
+stages:
+- stage: Build
+  jobs:
+  - job: Default
+    steps:
+    - template: azure-pipelines-sdk.yml
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet.build'
+      inputs:
+        command: custom
+        custom: build
+        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -p:BuildLabel=$(Build.BuildLabel) -p:BuildNumber=$(Build.BuildNumber) -p:ContinuousIntegrationBuild=true'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet.pack'
+      inputs:
+        command: custom
+        custom: pack
+        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -p:BuildLabel=$(Build.BuildLabel) -p:BuildNumber=$(Build.BuildNumber) -o $(Build.ArtifactStagingDirectory) --include-symbols --no-build'
+    - task: PublishPipelineArtifact@0
+      displayName: 'pipeline.artifacts.publish'
+      inputs:
+        artifactName: 'artifact'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+- stage: Test
+  jobs:
+  - job: Default
+    steps:
+    - template: azure-pipelines-sdk.yml
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet.build'
+      inputs:
+        command: custom
+        custom: build
+        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -p:BuildLabel=$(Build.BuildLabel) -p:BuildNumber=$(Build.BuildNumber) -p:ContinuousIntegrationBuild=true'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet.test'
+      inputs:
+        command: custom
+        custom: test
+        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -l trx -r $(Agent.TempDirectory) --no-build'
+    - task: PublishTestResults@2
+      displayName: 'pipeline.reports.publish'
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: '**/*.trx'
+        searchFolder: '$(Agent.TempDirectory)'
+- stage: Publish
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+  - job: Default
+    steps:
+    - checkout: none
+    - task: DownloadPipelineArtifact@0
+      displayName: 'pipeline.artifacts.downloads'
+      inputs:
+        artifactName: 'artifact'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+    - task: NuGetToolInstaller@0
+      displayName: 'nuget.use'
+      inputs:
+        versionSpec: '$(Build.NuGetVersion)'
+    - task: NuGetCommand@2
+      displayName: 'nuget.artifacts.publish'
+      inputs:
+        command: push
+        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
+        nuGetFeedType: external
+        publishFeedCredentials: 'MyGet'
