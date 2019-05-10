@@ -1,0 +1,9 @@
+# © Alexander Kozlenko. Licensed under the MIT License.
+
+variables:
+- name: 'Build.Configuration'
+  value: 'Release'
+- name: 'Build.BuildLabel'
+  value: 'Preview'
+- name: 'Build.NuGetVersion'
+  value: '5.0.0'

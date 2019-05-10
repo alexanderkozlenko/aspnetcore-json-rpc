@@ -1,0 +1,15 @@
+# © Alexander Kozlenko. Licensed under the MIT License.
+
+steps:
+- task: PowerShell@2
+  displayName: 'dotnet.sdk.version'
+  inputs:
+    pwsh: true
+    targetType: inline
+    script: |
+        Write-Host ('##vso[task.setvariable variable=DotNetCoreSdkVersion;]' + (Get-Content -Raw '$(Build.SourcesDirectory)/global.json' | ConvertFrom-Json).'sdk'.'version')
+- task: UseDotNet@2
+  displayName: 'dotnet.use'
+  inputs:
+    packageType: sdk
+    version: '$(DotNetCoreSdkVersion)'
