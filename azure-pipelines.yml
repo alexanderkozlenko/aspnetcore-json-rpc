@@ -3,8 +3,6 @@
 variables:
 - name: 'Build.ProjectPath'
   value: '$(Build.SourcesDirectory)/global.proj'
-- name: 'Build.NuGetVersion'
-  value: '5.0.0'
 - name: 'Build.Configuration'
   value: 'Release'
 stages:
@@ -67,7 +65,7 @@ stages:
     - task: NuGetToolInstaller@1
       displayName: 'nuget.use'
       inputs:
-        versionSpec: '$(Build.NuGetVersion)'
+        versionSpec: '$(System.NuGet.Version)'
     - task: NuGetCommand@2
       displayName: 'nuget.artifacts.publish'
       inputs:
