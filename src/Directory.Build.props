@@ -17,6 +17,5 @@
     <AssemblyOriginatorKeyFile>$(SolutionDirectory)\Open.snk</AssemblyOriginatorKeyFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <VersionSuffix Condition="('$(BuildLabel)' != '') and ('$(BuildNumber)' != '')">$(BuildLabel.ToLowerInvariant())-$(BuildNumber)</VersionSuffix>
   </PropertyGroup>
 </Project>

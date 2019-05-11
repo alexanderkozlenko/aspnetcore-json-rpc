@@ -1,9 +1,12 @@
 # © Alexander Kozlenko. Licensed under the MIT License.
 
 variables:
-- template: azure-pipelines-variables.yml
 - name: 'Build.ProjectPath'
   value: '$(Build.SourcesDirectory)/global.proj'
+- name: 'Build.NuGetVersion'
+  value: '5.0.0'
+- name: 'Build.Configuration'
+  value: 'Release'
 stages:
 - stage: Build
   jobs:
@@ -15,13 +18,13 @@ stages:
       inputs:
         command: custom
         custom: build
-        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -p:BuildLabel=$(Build.BuildLabel) -p:BuildNumber=$(Build.BuildNumber) -p:ContinuousIntegrationBuild=true'
+        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -p:ContinuousIntegrationBuild=true -p:BuildNumber=$(Build.BuildNumber)'
     - task: DotNetCoreCLI@2
       displayName: 'dotnet.pack'
       inputs:
         command: custom
         custom: pack
-        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -p:BuildLabel=$(Build.BuildLabel) -p:BuildNumber=$(Build.BuildNumber) -o $(Build.ArtifactStagingDirectory) --include-symbols --no-build'
+        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -p:ContinuousIntegrationBuild=true -p:BuildNumber=$(Build.BuildNumber) --no-build --include-symbols -o $(Build.ArtifactStagingDirectory)'
     - task: PublishPipelineArtifact@0
       displayName: 'pipeline.artifacts.publish'
       inputs:
@@ -37,13 +40,13 @@ stages:
       inputs:
         command: custom
         custom: build
-        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -p:BuildLabel=$(Build.BuildLabel) -p:BuildNumber=$(Build.BuildNumber) -p:ContinuousIntegrationBuild=true'
+        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -p:ContinuousIntegrationBuild=true -p:BuildNumber=$(Build.BuildNumber)'
     - task: DotNetCoreCLI@2
       displayName: 'dotnet.test'
       inputs:
         command: custom
         custom: test
-        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -l trx -r $(Agent.TempDirectory) --no-build'
+        arguments: '$(Build.ProjectPath) -c $(Build.Configuration) -p:ContinuousIntegrationBuild=true -p:BuildNumber=$(Build.BuildNumber) --no-build -l trx -r $(Agent.TempDirectory)'
     - task: PublishTestResults@2
       displayName: 'pipeline.reports.publish'
       inputs:
