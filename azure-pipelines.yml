@@ -60,7 +60,7 @@ stages:
     steps:
     - checkout: none
     - task: DownloadPipelineArtifact@1
-      displayName: 'pipeline.artifacts.downloads'
+      displayName: 'pipeline.artifacts.download'
       inputs:
         artifactName: 'artifact'
         targetPath: '$(Build.ArtifactStagingDirectory)'

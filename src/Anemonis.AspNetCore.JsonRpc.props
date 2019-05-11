@@ -11,7 +11,7 @@
     <PackageTags><![CDATA[aspnetcore json-rpc json rpc]]></PackageTags>
   </PropertyGroup>
   <PropertyGroup Condition="'$(BuildNumber)' != ''">
-    <VersionSuffix Condition="'$(VersionSuffix)' == ''">$(BuildNumber)</VersionSuffix>
-    <VersionSuffix Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)-$(BuildNumber)</VersionSuffix>
+    <VersionSuffix Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)-ci-$(BuildNumber)</VersionSuffix>
+    <VersionSuffix Condition="'$(VersionSuffix)' == ''">ci-$(BuildNumber)</VersionSuffix>
   </PropertyGroup>
 </Project>
