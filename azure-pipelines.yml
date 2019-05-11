@@ -59,12 +59,12 @@ stages:
   - job: Default
     steps:
     - checkout: none
-    - task: DownloadPipelineArtifact@0
+    - task: DownloadPipelineArtifact@1
       displayName: 'pipeline.artifacts.downloads'
       inputs:
         artifactName: 'artifact'
         targetPath: '$(Build.ArtifactStagingDirectory)'
-    - task: NuGetToolInstaller@0
+    - task: NuGetToolInstaller@1
       displayName: 'nuget.use'
       inputs:
         versionSpec: '$(Build.NuGetVersion)'
