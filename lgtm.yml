@@ -2,8 +2,8 @@
 
 path_classifiers:
   test:
-    - "**/*Benchmarks.cs"
+    - '**/*Benchmarks.cs'
 extraction:
   csharp:
     index:
-      build_command: "dotnet build ./global.proj -property:BuildingForLiveUnitTesting=true"
+      build_command: 'dotnet build ./global.proj -p:BuildingForLiveUnitTesting=true'
