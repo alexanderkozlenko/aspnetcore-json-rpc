@@ -7,9 +7,9 @@ steps:
     pwsh: true
     targetType: inline
     script: |
-        Write-Host ('##vso[task.setvariable variable=DotNetCoreSdkVersion;]' + (Get-Content -Raw '$(Build.SourcesDirectory)/global.json' | ConvertFrom-Json).'sdk'.'version')
+        Write-Host ('##vso[task.setvariable variable=System.DotNetCoreSdk.Version;]' + (Get-Content -Raw '$(Build.SourcesDirectory)/global.json' | ConvertFrom-Json).'sdk'.'version')
 - task: UseDotNet@2
   displayName: 'dotnet.use'
   inputs:
     packageType: sdk
-    version: '$(DotNetCoreSdkVersion)'
+    version: '$(System.DotNetCoreSdk.Version)'

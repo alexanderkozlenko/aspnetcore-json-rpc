@@ -72,4 +72,4 @@ stages:
         command: push
         packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
         nuGetFeedType: external
-        publishFeedCredentials: 'MyGet'
+        publishFeedCredentials: '$(System.ServiceConnection.NuGet.Staging)'
