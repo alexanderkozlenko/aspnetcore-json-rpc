@@ -52,7 +52,7 @@ stages:
         testResultsFiles: '**/*.trx'
         searchFolder: '$(Agent.TempDirectory)'
 - stage: Publish
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), or(ne(variables['Build.AllowPublish'], ''), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
   jobs:
   - job: Default
     steps:
@@ -60,7 +60,6 @@ stages:
     - task: DownloadPipelineArtifact@1
       displayName: 'pipeline.artifacts.download'
       inputs:
-        artifactName: 'artifact'
         targetPath: '$(Build.ArtifactStagingDirectory)'
     - task: NuGetToolInstaller@1
       displayName: 'nuget.use'
