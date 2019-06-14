@@ -19,7 +19,18 @@ namespace Anemonis.AspNetCore.JsonRpc
 
             for (var i = 0; i < assemblies.Length; i++)
             {
-                foreach (var type in assemblies[i].DefinedTypes)
+                var definedTypes = default(IEnumerable<TypeInfo>);
+
+                try
+                {
+                    definedTypes = assemblies[i].DefinedTypes;
+                }
+                catch (ReflectionTypeLoadException)
+                {
+                    continue;
+                }
+
+                foreach (var type in definedTypes)
                 {
                     if (typeof(T).IsAssignableFrom(type))
                     {
