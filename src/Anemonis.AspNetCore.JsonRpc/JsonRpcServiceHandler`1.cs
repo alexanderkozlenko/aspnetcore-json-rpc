@@ -183,8 +183,14 @@ namespace Anemonis.AspNetCore.JsonRpc
         /// <summary>Handles a JSON-RPC request and returns a JSON-RPC response or <see langword="null" /> for a notification as an asynchronous operation.</summary>
         /// <param name="request">The JSON-RPC request.</param>
         /// <returns>A task that represents the asynchronous operation. The task result is a JSON-RPC response or <see langword="null" /> for a notification.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="request" /> is <see langword="null" />.</exception>
         public async Task<JsonRpcResponse> HandleAsync(JsonRpcRequest request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             var requestId = request.Id;
             var methodInfo = _metadata[request.Method];
             var method = methodInfo.Method;
