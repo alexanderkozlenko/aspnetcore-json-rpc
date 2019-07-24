@@ -5,6 +5,7 @@
 
 [![NuGet](https://img.shields.io/nuget/vpre/Anemonis.AspNetCore.JsonRpc.svg?style=flat-square)](https://www.nuget.org/packages/Anemonis.AspNetCore.JsonRpc)
 [![MyGet](https://img.shields.io/myget/alexanderkozlenko/vpre/Anemonis.AspNetCore.JsonRpc.svg?label=myget&style=flat-square)](https://www.myget.org/feed/alexanderkozlenko/package/nuget/Anemonis.AspNetCore.JsonRpc)
+[![LGTM](https://img.shields.io/lgtm/alerts/github/alexanderkozlenko/aspnetcore-json-rpc.svg?style=flat-square)](https://lgtm.com/projects/g/alexanderkozlenko/aspnetcore-json-rpc)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/anemonis/aspnetcore-json-rpc)
 
 ## Project Details
