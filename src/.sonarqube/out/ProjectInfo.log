@@ -1,0 +1,26 @@
+Product projects
+---------------------------------------
+D:\Workspace\aspnetcore-json-rpc\src\Anemonis.AspNetCore.JsonRpc\Anemonis.AspNetCore.JsonRpc.csproj
+D:\Workspace\aspnetcore-json-rpc\src\Anemonis.AspNetCore.JsonRpc.Benchmarks\Anemonis.AspNetCore.JsonRpc.Benchmarks.csproj
+
+
+Test projects
+---------------------------------------
+D:\Workspace\aspnetcore-json-rpc\src\Anemonis.AspNetCore.JsonRpc.UnitTests\Anemonis.AspNetCore.JsonRpc.UnitTests.csproj
+
+
+Invalid projects
+---------------------------------------
+{none}
+
+
+Skipped projects
+---------------------------------------
+{none}
+
+
+Excluded projects
+---------------------------------------
+{none}
+
+

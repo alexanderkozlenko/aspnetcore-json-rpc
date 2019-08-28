@@ -87,7 +87,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                 {
                     continue;
                 }
-                if (!(method.ReturnType == typeof(Task)) && !(method.ReturnType.IsGenericType && (method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))))
+                if ((method.ReturnType != typeof(Task)) && !(method.ReturnType.IsGenericType && (method.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))))
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.method.invalid_type"), method.Name, typeof(T)));
                 }

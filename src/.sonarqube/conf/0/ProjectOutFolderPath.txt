@@ -1,0 +1,1 @@
+D:\Workspace\aspnetcore-json-rpc\src\.sonarqube\out\0
