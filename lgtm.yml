@@ -1,9 +1,0 @@
-# © Alexander Kozlenko. Licensed under the MIT License.
-
-path_classifiers:
-  test:
-    - '**/*Benchmarks.cs'
-extraction:
-  csharp:
-    index:
-      build_command: 'dotnet build ./global.proj -p:BuildingForLiveUnitTesting=true'
