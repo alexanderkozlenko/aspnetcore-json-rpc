@@ -27,15 +27,9 @@ namespace Anemonis.AspNetCore.JsonRpc
         /// <summary>Initializes a new instance of the <see cref="JsonRpcServiceException" /> class.</summary>
         /// <param name="code">The number that indicates the error type that occurred.</param>
         /// <param name="message">The message that describes the error.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="message" /> is <see langword="null" />.</exception>
         public JsonRpcServiceException(long code, string message)
             : base(message)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
             Code = code;
         }
 
@@ -43,15 +37,9 @@ namespace Anemonis.AspNetCore.JsonRpc
         /// <param name="code">The number that indicates the error type that occurred.</param>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="data">The value that contains additional information about the error.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="message" /> is <see langword="null" />.</exception>
         public JsonRpcServiceException(long code, string message, object data)
             : base(message)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
             Code = code;
             ErrorData = data;
             HasErrorData = true;

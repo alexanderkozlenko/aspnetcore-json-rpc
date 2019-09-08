@@ -8,13 +8,6 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
     public sealed class JsonRpcServiceExceptionTests
     {
         [TestMethod]
-        public void ConstructorWithCodeAndMessageWhenMessageIsNull()
-        {
-            Assert.ThrowsException<ArgumentNullException>(() =>
-                new JsonRpcServiceException(0L, null));
-        }
-
-        [TestMethod]
         public void GetHasErrorDataIsFalse()
         {
             var exception = new JsonRpcServiceException(0L, "m");
