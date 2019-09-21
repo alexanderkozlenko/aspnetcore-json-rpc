@@ -1,13 +1,11 @@
-﻿<!-- © Alexander Kozlenko. Licensed under the MIT License. -->
+<!-- © Alexander Kozlenko. Licensed under the MIT License. -->
 <Project>
   <Target Name="InitializePackageUrls"
           DependsOnTargets="$(SourceLinkUrlInitializerTargets)"
-          BeforeTargets="GenerateNuspec"
-          Condition="'$(IsPackable)' == 'true'">
+          BeforeTargets="GenerateNuspec">
     <PropertyGroup>
-      <PackageProjectUrl>%(SourceRoot.RepositoryUrl)</PackageProjectUrl>
+      <PackageProjectUrl>$(RepositoryUrl.Replace('.git', ''))</PackageProjectUrl>
       <PackageIconUrl>%(SourceRoot.SourceLinkUrl)</PackageIconUrl>
-      <PackageProjectUrl>$(PackageProjectUrl.Replace('.git', ''))</PackageProjectUrl>
       <PackageIconUrl>$(PackageIconUrl.Replace('*', 'img/$(PackageId).png'))</PackageIconUrl>
     </PropertyGroup>
   </Target>
