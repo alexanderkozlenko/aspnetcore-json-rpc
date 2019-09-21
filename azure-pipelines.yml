@@ -4,7 +4,8 @@ variables:
 - name: 'Build.ProjectPath'
   value: '$(Build.SourcesDirectory)/global.proj'
 stages:
-- stage: Build
+- stage: Pack
+  dependsOn: []
   jobs:
   - job: Release
     steps:
@@ -31,7 +32,8 @@ stages:
         artifactName: 'packages'
         targetPath: '$(Build.ArtifactStagingDirectory)'
 - stage: Test
-  condition: and(succeeded(), eq(variables['Build.SkipTest'], ''))
+  dependsOn: []
+  condition: eq(variables['Build.SkipTest'], '')
   jobs:
   - job: Release
     steps:
@@ -51,8 +53,8 @@ stages:
           sonar.log.level=$(Sonar.Logging.Level)
           sonar.scm.disabled=true
           sonar.cs.roslyn.ignoreIssues=true
-          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/reports/**/*.trx
-          sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/reports/**/*.opencover.xml
+          sonar.cs.vstest.reportsPaths=$(Common.TestResultsDirectory)/**/*.trx
+          sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)/**/*.opencover.xml
     - task: DotNetCoreCLI@2
       displayName: 'dotnet.build'
       inputs:
@@ -64,21 +66,24 @@ stages:
       inputs:
         command: custom
         custom: test
-        arguments: '$(Build.ProjectPath) -v $(DOTNET_VERBOSITY) -c Release -p:BuildNumber=$(Build.BuildNumber) --no-build -s $(Build.SourcesDirectory)/src/.runsettings -l trx -r $(Agent.TempDirectory)/reports'
-    - task: SonarCloudAnalyze@1
-      displayName: 'sonar.analyze'
+        arguments: '$(Build.ProjectPath) -v $(DOTNET_VERBOSITY) -c Release -p:BuildNumber=$(Build.BuildNumber) --no-build -s $(Build.SourcesDirectory)/src/.runsettings -l trx -r $(Common.TestResultsDirectory)'
     - task: PublishTestResults@2
       displayName: 'report.publish'
       inputs:
         testRunner: VSTest
         testResultsFiles: '**/*.trx'
-        searchFolder: '$(Agent.TempDirectory)'
+        searchFolder: '$(Common.TestResultsDirectory)'
       condition: always()
+    - task: SonarCloudAnalyze@1
+      displayName: 'sonar.analyze'
     - task: SonarCloudPublish@1
       displayName: 'sonar.publish'
       condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-- stage: Publish
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SkipPublish'], ''))
+- stage: Push
+  dependsOn:
+  - Pack
+  - Test
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SkipPush'], ''))
   jobs:
   - job: Release
     steps:
