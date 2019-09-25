@@ -1,7 +1,7 @@
 ﻿<!-- © Alexander Kozlenko. Licensed under the MIT License. -->
 <Project>
   <PropertyGroup>
-    <VersionPrefix>1.17.1</VersionPrefix>
+    <VersionPrefix>1.18.0</VersionPrefix>
     <VersionSuffix>beta</VersionSuffix>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
