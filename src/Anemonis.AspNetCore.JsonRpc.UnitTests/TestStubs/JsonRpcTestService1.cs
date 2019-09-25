@@ -123,5 +123,3 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests.TestStubs
         public event EventHandler<EventArgs> Disposed;
     }
 }
-
-#pragma warning restore IDE0060

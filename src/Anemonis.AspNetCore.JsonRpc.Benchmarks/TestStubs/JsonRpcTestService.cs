@@ -115,5 +115,3 @@ namespace Anemonis.AspNetCore.JsonRpc.Benchmarks.TestStubs
         }
     }
 }
-
-#pragma warning restore IDE0060

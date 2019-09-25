@@ -4,8 +4,8 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-using Anemonis.AspNetCore.JsonRpc.Benchmarks.Resources;
 using Anemonis.AspNetCore.JsonRpc.Benchmarks.TestStubs;
+using Anemonis.Resources;
 
 using BenchmarkDotNet.Attributes;
 

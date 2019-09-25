@@ -167,14 +167,8 @@ namespace Anemonis.AspNetCore.JsonRpc
                 return;
             }
 
-            if (requestStreamEncoding == null)
-            {
-                requestStreamEncoding = SupportedEncodings[Encoding.UTF8.WebName];
-            }
-            if (responseStreamEncoding == null)
-            {
-                responseStreamEncoding = SupportedEncodings[Encoding.UTF8.WebName];
-            }
+            requestStreamEncoding ??= SupportedEncodings[Encoding.UTF8.WebName];
+            responseStreamEncoding ??= SupportedEncodings[Encoding.UTF8.WebName];
 
             var jsonRpcRequestData = default(JsonRpcData<JsonRpcRequest>);
 
@@ -431,5 +425,3 @@ namespace Anemonis.AspNetCore.JsonRpc
         }
     }
 }
-
-#pragma warning restore CA1303, CA2007

@@ -293,5 +293,3 @@ namespace Anemonis.AspNetCore.JsonRpc
         }
     }
 }
-
-#pragma warning restore CA1810

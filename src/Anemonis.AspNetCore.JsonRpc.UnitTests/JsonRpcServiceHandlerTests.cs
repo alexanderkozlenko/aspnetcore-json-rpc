@@ -10,6 +10,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Moq;
 
+#pragma warning disable IDE0067
+
 namespace Anemonis.AspNetCore.JsonRpc.UnitTests
 {
     [TestClass]
