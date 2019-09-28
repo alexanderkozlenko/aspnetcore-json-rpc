@@ -12,34 +12,32 @@ namespace Anemonis.AspNetCore.JsonRpc
     internal static class InterfaceAssistant<T>
         where T : class
     {
-        public static List<TypeInfo> GetDefinedTypes()
+        public static List<Type> GetDefinedTypes()
         {
-            var types = new List<TypeInfo>();
+            var definedTypes = new List<Type>();
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             for (var i = 0; i < assemblies.Length; i++)
             {
-                var definedTypes = default(IEnumerable<TypeInfo>);
-
                 try
                 {
-                    definedTypes = assemblies[i].DefinedTypes;
+                    var assemblyTypes = assemblies[i].GetTypes();
+
+                    for (var j = 0; j < assemblyTypes.Length; j++)
+                    {
+                        if (typeof(T).IsAssignableFrom(assemblyTypes[j]))
+                        {
+                            definedTypes.Add(assemblyTypes[j]);
+                        }
+                    }
                 }
                 catch (ReflectionTypeLoadException)
                 {
                     continue;
                 }
-
-                foreach (var type in definedTypes)
-                {
-                    if (typeof(T).IsAssignableFrom(type))
-                    {
-                        types.Add(type);
-                    }
-                }
             }
 
-            return types;
+            return definedTypes;
         }
 
         public static void VerifyTypeParam(Type param, string paramName)
