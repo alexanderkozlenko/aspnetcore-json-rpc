@@ -3,13 +3,11 @@
 [JSON-RPC 2.0](http://www.jsonrpc.org/specification) middleware for ASP.NET Core 3 based on the [JSON-RPC 2.0 Transport: HTTP](https://www.simple-is-better.org/json-rpc/transport_http.html) specification and the [Anemonis.JsonRpc](https://github.com/alexanderkozlenko/json-rpc)
  serializer.
 
-[![NuGet](https://img.shields.io/nuget/vpre/Anemonis.AspNetCore.JsonRpc.svg?style=flat-square)](https://www.nuget.org/packages/Anemonis.AspNetCore.JsonRpc)
-[![MyGet](https://img.shields.io/myget/alexanderkozlenko/vpre/Anemonis.AspNetCore.JsonRpc.svg?label=myget&style=flat-square)](https://www.myget.org/feed/alexanderkozlenko/package/nuget/Anemonis.AspNetCore.JsonRpc)
-
-[![Coverage](https://img.shields.io/sonar/coverage/aspnetcore-json-rpc?format=long&server=https%3A%2F%2Fsonarcloud.io&style=flat-square)](https://sonarcloud.io/component_measures?id=aspnetcore-json-rpc&metric=coverage&view=list)
-[![Violations](https://img.shields.io/sonar/violations/aspnetcore-json-rpc?format=long&server=https%3A%2F%2Fsonarcloud.io&style=flat-square)](https://sonarcloud.io/project/issues?id=aspnetcore-json-rpc&resolved=false)
-
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/anemonis/aspnetcore-json-rpc)
+| [![](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/anemonis/aspnetcore-json-rpc) | Release | Current |
+|---|---|---|
+| Artifacts | [![](https://img.shields.io/nuget/vpre/Anemonis.AspNetCore.JsonRpc.svg?style=flat-square)](https://www.nuget.org/packages/Anemonis.AspNetCore.JsonRpc) | [![](https://img.shields.io/myget/alexanderkozlenko/vpre/Anemonis.AspNetCore.JsonRpc.svg?label=myget&style=flat-square)](https://www.myget.org/feed/alexanderkozlenko/package/nuget/Anemonis.AspNetCore.JsonRpc) |
+| Code Health | | [![](https://img.shields.io/sonar/coverage/aspnetcore-json-rpc?format=long&server=https%3A%2F%2Fsonarcloud.io&style=flat-square)](https://sonarcloud.io/component_measures?id=aspnetcore-json-rpc&metric=coverage&view=list) [![](https://img.shields.io/sonar/violations/aspnetcore-json-rpc?format=long&server=https%3A%2F%2Fsonarcloud.io&style=flat-square)](https://sonarcloud.io/project/issues?id=aspnetcore-json-rpc&resolved=false) |
+| Build Status | | [![](https://img.shields.io/azure-devops/build/alexanderkozlenko/github-pipelines/4?label=master&style=flat-square)](https://dev.azure.com/alexanderkozlenko/github-pipelines/_build?definitionId=4&_a=summary) |
 
 ## Project Details
 
