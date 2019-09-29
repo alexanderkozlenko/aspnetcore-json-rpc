@@ -78,12 +78,12 @@ stages:
         testRunner: VSTest
         testResultsFiles: '**/*.trx'
         searchFolder: '$(Common.TestResultsDirectory)'
-      condition: always()
     - task: SonarCloudAnalyze@1
       displayName: 'sonar.analyze'
+      condition: and(succeeded(), not(canceled()))
     - task: SonarCloudPublish@1
       displayName: 'sonar.publish'
-      condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+      condition: and(succeeded(), not(canceled()), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 - stage: Push
   dependsOn:
   - Pack
@@ -104,6 +104,7 @@ stages:
         versionSpec: '$(System.NuGet.Version)'
     - task: NuGetCommand@2
       displayName: 'nuget.push'
+      condition: and(succeeded(), not(canceled()))
       inputs:
         command: push
         packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
