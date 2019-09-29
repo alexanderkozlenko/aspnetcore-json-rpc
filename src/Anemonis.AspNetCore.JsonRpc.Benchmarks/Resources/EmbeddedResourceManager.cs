@@ -2,7 +2,6 @@
 
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using System.Text;
 
@@ -28,11 +27,11 @@ namespace Anemonis.Resources
                 throw new InvalidOperationException($"The resource \"{name}\" was not found");
             }
 
-            using var bufferStream = new MemoryStream((int)resourceStream.Length);
+            var buffer = new byte[resourceStream.Length];
 
-            resourceStream.CopyTo(bufferStream);
+            resourceStream.Read(buffer, 0, buffer.Length);
 
-            return Encoding.UTF8.GetString(bufferStream.ToArray());
+            return Encoding.UTF8.GetString(buffer);
         }
     }
 }
