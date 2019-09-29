@@ -33,7 +33,6 @@ namespace Anemonis.AspNetCore.JsonRpc
                 }
                 catch (ReflectionTypeLoadException)
                 {
-                    continue;
                 }
             }
 
