@@ -13,6 +13,7 @@ using Anemonis.JsonRpc;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
@@ -28,17 +29,17 @@ namespace Anemonis.AspNetCore.JsonRpc
     public sealed class JsonRpcMiddleware<T> : JsonRpcMiddleware, IMiddleware, IDisposable
         where T : class, IJsonRpcHandler
     {
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
         private readonly ILogger _logger;
         private readonly T _handler;
         private readonly JsonRpcSerializer _serializer;
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcMiddleware{T}" /> class.</summary>
         /// <param name="services">The <see cref="IServiceProvider" /> instance for retrieving service objects.</param>
-        /// <param name="environment">The <see cref="IHostingEnvironment" /> instance for retrieving hosting environment information.</param>
+        /// <param name="environment">The <see cref="IWebHostEnvironment" /> instance for retrieving web hosting environment information.</param>
         /// <param name="logger">The <see cref="ILogger{T}" /> instance for logging.</param>
         /// <exception cref="ArgumentNullException"><paramref name="services" />, <paramref name="environment" />, or <paramref name="logger" /> is <see langword="null" />.</exception>
-        public JsonRpcMiddleware(IServiceProvider services, IHostingEnvironment environment, ILogger<JsonRpcMiddleware<T>> logger)
+        public JsonRpcMiddleware(IServiceProvider services, IWebHostEnvironment environment, ILogger<JsonRpcMiddleware<T>> logger)
         {
             if (services == null)
             {
@@ -185,7 +186,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 var jsonRpcResponse = StandardJsonRpcResponses[JsonRpcErrorCode.InvalidFormat];
 
-                if (_environment.IsDevelopment())
+                if (_environment.EnvironmentName == Environments.Development)
                 {
                     jsonRpcResponse = new JsonRpcResponse(default, new JsonRpcError(jsonRpcResponse.Error.Code, jsonRpcResponse.Error.Message, e.ToString()));
                 }
@@ -202,7 +203,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 var jsonRpcResponse = StandardJsonRpcResponses[JsonRpcErrorCode.InvalidOperation];
 
-                if (_environment.IsDevelopment())
+                if (_environment.EnvironmentName == Environments.Development)
                 {
                     jsonRpcResponse = new JsonRpcResponse(default, new JsonRpcError(jsonRpcResponse.Error.Code, jsonRpcResponse.Error.Message, e.ToString()));
                 }
@@ -351,7 +352,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 var jsonRpcError = StandardJsonRpcErrors[exception.ErrorCode];
 
-                if (_environment.IsDevelopment())
+                if (_environment.EnvironmentName == Environments.Development)
                 {
                     jsonRpcError = new JsonRpcError(jsonRpcError.Code, jsonRpcError.Message, exception.ToString());
                 }
