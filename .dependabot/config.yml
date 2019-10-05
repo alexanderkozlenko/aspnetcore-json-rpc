@@ -1,0 +1,16 @@
+version: 1
+update_configs:
+  - package_manager: "dotnet:nuget"
+    directory: "/"
+    update_schedule: "live"
+    automerged_updates:
+      - match:
+          dependency_name: "Microsoft.*.Analyzers"
+      - match:
+          dependency_name: "Microsoft.*.Sdk"
+      - match:
+          dependency_name: "Microsoft.Build.*"
+      - match:
+          dependency_name: "Microsoft.SourceLink.*"
+      - match:
+          dependency_name: "MSTest.*"
