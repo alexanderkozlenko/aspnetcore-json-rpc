@@ -7,7 +7,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors><![CDATA[Alexander Kozlenko]]></Authors>
     <Copyright><![CDATA[© $(Authors). All rights reserved.]]></Copyright>
-    <Description><![CDATA[JSON-RPC 2.0 middleware for ASP.NET Core 2 based on the "JSON-RPC 2.0 Transport: HTTP" specification]]></Description>
+    <Description><![CDATA[JSON-RPC 2.0 middleware for ASP.NET Core 3 based on the "JSON-RPC 2.0 Transport: HTTP" specification]]></Description>
     <PackageTags><![CDATA[aspnetcore json-rpc json rpc]]></PackageTags>
   </PropertyGroup>
   <PropertyGroup Condition="'$(BuildNumber)' != ''">
