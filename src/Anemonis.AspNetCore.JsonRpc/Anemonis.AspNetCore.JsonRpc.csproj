@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Anemonis.JsonRpc" Version="1.23.0" />
-    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.6" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.9.7" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
