@@ -12,8 +12,6 @@ namespace Anemonis.AspNetCore.JsonRpc
     /// <summary>Represents a middleware for adding a JSON-RPC handler to the application's request pipeline.</summary>
     public abstract class JsonRpcMiddleware
     {
-        private protected const int StreamBufferSize = 1024;
-
         private protected static readonly string ContentTypeHeaderValue = $"{MediaTypes.ApplicationJson}; charset=utf-8";
         private protected static readonly Dictionary<string, Encoding> SupportedEncodings = CreateSupportedEncodings();
         private protected static readonly Dictionary<long, JsonRpcError> StandardJsonRpcErrors = CreateStandardJsonRpcErrors();

@@ -175,10 +175,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
             try
             {
-                using (var streamReader = new StreamReader(context.Request.Body, requestStreamEncoding, false, StreamBufferSize, true))
-                {
-                    jsonRpcRequestData = await _serializer.DeserializeRequestDataAsync(streamReader, context.RequestAborted);
-                }
+                jsonRpcRequestData = await _serializer.DeserializeRequestDataAsync(context.Request.Body, requestStreamEncoding, context.RequestAborted);
             }
             catch (JsonException e)
             {
@@ -312,10 +309,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
             using (var responseStream = new MemoryStream())
             {
-                using (var streamWriter = new StreamWriter(responseStream, encoding, StreamBufferSize, true))
-                {
-                    await _serializer.SerializeResponseAsync(jsonRpcResponse, streamWriter, context.RequestAborted);
-                }
+                await _serializer.SerializeResponseAsync(jsonRpcResponse, responseStream, encoding, context.RequestAborted);
 
                 context.Response.ContentLength = responseStream.Length;
                 responseStream.Position = 0;
@@ -330,10 +324,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
             using (var responseStream = new MemoryStream())
             {
-                using (var streamWriter = new StreamWriter(responseStream, encoding, StreamBufferSize, true))
-                {
-                    await _serializer.SerializeResponsesAsync(jsonRpcResponses, streamWriter, context.RequestAborted);
-                }
+                await _serializer.SerializeResponsesAsync(jsonRpcResponses, responseStream, encoding, context.RequestAborted);
 
                 context.Response.ContentLength = responseStream.Length;
                 responseStream.Position = 0;
