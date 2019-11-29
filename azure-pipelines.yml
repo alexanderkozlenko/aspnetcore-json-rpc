@@ -26,7 +26,7 @@ stages:
         command: custom
         custom: pack
         arguments: '$(Build.ProjectPath) -v $(DOTNET_VERBOSITY) -c Release -p:ContinuousIntegrationBuild=true -p:BuildNumber=$(Build.BuildNumber) --no-build --include-symbols -o $(Build.ArtifactStagingDirectory)'
-    - task: PublishPipelineArtifact@0
+    - task: PublishPipelineArtifact@1
       displayName: 'artifact.publish'
       inputs:
         artifactName: 'packages'
@@ -93,7 +93,7 @@ stages:
   - job: Release
     steps:
     - checkout: none
-    - task: DownloadPipelineArtifact@1
+    - task: DownloadPipelineArtifact@2
       displayName: 'artifact.download'
       inputs:
         artifactName: 'packages'
