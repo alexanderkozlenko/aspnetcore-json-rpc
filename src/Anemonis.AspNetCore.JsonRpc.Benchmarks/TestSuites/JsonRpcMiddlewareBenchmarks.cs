@@ -13,15 +13,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Primitives;
-using Microsoft.Net.Http.Headers;
 
 namespace Anemonis.AspNetCore.JsonRpc.Benchmarks.TestSuites
 {
     public class JsonRpcMiddlewareBenchmarks
     {
         private static readonly IReadOnlyDictionary<string, byte[]> _resources = CreateResourceDictionary();
-        private static readonly StringValues _acceptHeaderValue = new StringValues("application/json; charset=utf-8");
 
         private readonly IMiddleware _middleware1 = CreateJsonRpcHandlerMiddleware();
         private readonly IMiddleware _middleware2 = CreateJsonRpcServiceMiddleware();
@@ -83,7 +80,6 @@ namespace Anemonis.AspNetCore.JsonRpc.Benchmarks.TestSuites
 
             result.Request.Method = HttpMethods.Post;
             result.Request.ContentType = "application/json; charset=utf-8";
-            result.Request.Headers.Add(HeaderNames.Accept, _acceptHeaderValue);
             result.Request.Body = new MemoryStream(_resources[name], false);
             result.Response.Body = new MemoryStream();
 

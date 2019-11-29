@@ -115,10 +115,6 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 return;
             }
-
-            var requestStreamEncoding = default(Encoding);
-            var responseStreamEncoding = default(Encoding);
-
             if (!context.Request.Headers.TryGetValue(HeaderNames.ContentType, out var contentTypeHeaderValueString))
             {
                 context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
@@ -131,46 +127,25 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 return;
             }
-            if (!contentTypeHeaderValue.MediaType.Equals(MediaTypes.ApplicationJson, StringComparison.OrdinalIgnoreCase))
+            if (!contentTypeHeaderValue.MediaType.Equals(JsonRpcTransport.MediaType, StringComparison.OrdinalIgnoreCase))
             {
                 context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
 
                 return;
             }
-            if (contentTypeHeaderValue.Charset.HasValue && !SupportedEncodings.TryGetValue(contentTypeHeaderValue.Charset.Value, out requestStreamEncoding))
+
+            var requestStreamEncoding = default(Encoding);
+
+            if (contentTypeHeaderValue.Charset.HasValue && !JsonRpcTransport.CharsetEncodings.TryGetValue(contentTypeHeaderValue.Charset.Value, out requestStreamEncoding))
             {
                 context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
 
                 return;
             }
-            if (!context.Request.Headers.TryGetValue(HeaderNames.Accept, out var acceptTypeHeaderValueString))
-            {
-                context.Response.StatusCode = StatusCodes.Status406NotAcceptable;
 
-                return;
-            }
-            if (!MediaTypeHeaderValue.TryParse((string)acceptTypeHeaderValueString, out var acceptTypeHeaderValue))
-            {
-                context.Response.StatusCode = StatusCodes.Status406NotAcceptable;
+            requestStreamEncoding ??= JsonRpcTransport.CharsetEncodings[Encoding.UTF8.WebName];
 
-                return;
-            }
-            if (!acceptTypeHeaderValue.MediaType.Equals(MediaTypes.ApplicationJson, StringComparison.OrdinalIgnoreCase))
-            {
-                context.Response.StatusCode = StatusCodes.Status406NotAcceptable;
-
-                return;
-            }
-            if (acceptTypeHeaderValue.Charset.HasValue && !SupportedEncodings.TryGetValue(acceptTypeHeaderValue.Charset.Value, out responseStreamEncoding))
-            {
-                context.Response.StatusCode = StatusCodes.Status406NotAcceptable;
-
-                return;
-            }
-
-            requestStreamEncoding ??= SupportedEncodings[Encoding.UTF8.WebName];
-            responseStreamEncoding ??= SupportedEncodings[Encoding.UTF8.WebName];
-
+            var responseStreamEncoding = JsonRpcTransport.CharsetEncodings[Encoding.UTF8.WebName];
             var jsonRpcRequestData = default(JsonRpcData<JsonRpcRequest>);
 
             try

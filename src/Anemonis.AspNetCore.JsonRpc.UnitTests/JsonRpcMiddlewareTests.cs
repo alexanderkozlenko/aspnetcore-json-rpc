@@ -138,7 +138,6 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
 
             httpContext.Request.Method = HttpMethods.Post;
             httpContext.Request.ContentType = mediaType;
-            httpContext.Request.Headers.Add(HeaderNames.Accept, "application/json; charset=utf-8");
 
             await jsonRpcMiddleware.InvokeAsync(httpContext, c => Task.CompletedTask);
 
@@ -169,63 +168,6 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
             await jsonRpcMiddleware.InvokeAsync(httpContext, c => Task.CompletedTask);
 
             Assert.AreEqual(StatusCodes.Status415UnsupportedMediaType, httpContext.Response.StatusCode);
-        }
-
-        [TestMethod]
-        public async Task InvokeAsyncWhenAcceptHeaderIsNotSpecified()
-        {
-            var serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-
-            serviceProviderMock.Setup(o => o.GetService(typeof(JsonRpcTestHandler1)))
-                .Returns(null);
-            serviceProviderMock.Setup(o => o.GetService(typeof(IOptions<JsonRpcOptions>)))
-                .Returns(null);
-            serviceProviderMock.Setup(o => o.GetService(typeof(ILoggerFactory)))
-                .Returns(null);
-
-            var environmentMock = new Mock<IWebHostEnvironment>(MockBehavior.Strict);
-            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Loose);
-            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, environmentMock.Object, loggerMock.Object);
-            var httpContext = new DefaultHttpContext();
-
-            httpContext.Request.Method = HttpMethods.Post;
-            httpContext.Request.ContentType = "application/json; charset=utf-8";
-
-            await jsonRpcMiddleware.InvokeAsync(httpContext, c => Task.CompletedTask);
-
-            Assert.AreEqual(StatusCodes.Status406NotAcceptable, httpContext.Response.StatusCode);
-        }
-
-        [DataTestMethod]
-        [DataRow("application/json; charset=us-ascii")]
-        [DataRow("application/json; charset=utf")]
-        [DataRow("application/x-www-form-urlencoded")]
-        [DataRow("application/xml")]
-        [DataRow("multipart/form-data")]
-        [DataRow("text/plain")]
-        public async Task InvokeAsyncWhenAcceptTypeHeaderIsInvalid(string mediaType)
-        {
-            var serviceProviderMock = new Mock<IServiceProvider>(MockBehavior.Strict);
-
-            serviceProviderMock.Setup(o => o.GetService(typeof(JsonRpcTestHandler1)))
-                .Returns(null);
-            serviceProviderMock.Setup(o => o.GetService(typeof(IOptions<JsonRpcOptions>)))
-                .Returns(null);
-            serviceProviderMock.Setup(o => o.GetService(typeof(ILoggerFactory)))
-                .Returns(null);
-
-            var environmentMock = new Mock<IWebHostEnvironment>(MockBehavior.Strict);
-            var loggerMock = new Mock<ILogger<JsonRpcMiddleware<JsonRpcTestHandler1>>>(MockBehavior.Loose);
-            var jsonRpcMiddleware = new JsonRpcMiddleware<JsonRpcTestHandler1>(serviceProviderMock.Object, environmentMock.Object, loggerMock.Object);
-            var httpContext = new DefaultHttpContext();
-
-            httpContext.Request.Method = HttpMethods.Post;
-            httpContext.Request.ContentType = "application/json; charset=utf-8";
-            httpContext.Request.Headers.Add(HeaderNames.Accept, mediaType);
-
-            await jsonRpcMiddleware.InvokeAsync(httpContext, c => Task.CompletedTask);
-
-            Assert.AreEqual(StatusCodes.Status406NotAcceptable, httpContext.Response.StatusCode);
         }
 
         [DataTestMethod]
@@ -304,7 +246,6 @@ namespace Anemonis.AspNetCore.JsonRpc.UnitTests
 
             httpContext.Request.Method = HttpMethods.Post;
             httpContext.Request.ContentType = "application/json; charset=utf-8";
-            httpContext.Request.Headers.Add(HeaderNames.Accept, "application/json; charset=utf-8");
             httpContext.Request.Body = new MemoryStream(Encoding.UTF8.GetBytes(requestActualContent));
             httpContext.Response.Body = new MemoryStream();
 

@@ -1,8 +1,6 @@
 ﻿// © Alexander Kozlenko. Licensed under the MIT License.
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 using Anemonis.AspNetCore.JsonRpc.Resources;
 using Anemonis.JsonRpc;
@@ -12,26 +10,15 @@ namespace Anemonis.AspNetCore.JsonRpc
     /// <summary>Represents a middleware for adding a JSON-RPC handler to the application's request pipeline.</summary>
     public abstract class JsonRpcMiddleware
     {
-        private protected static readonly string ContentTypeHeaderValue = $"{MediaTypes.ApplicationJson}; charset=utf-8";
-        private protected static readonly Dictionary<string, Encoding> SupportedEncodings = CreateSupportedEncodings();
-        private protected static readonly Dictionary<long, JsonRpcError> StandardJsonRpcErrors = CreateStandardJsonRpcErrors();
-        private protected static readonly Dictionary<long, JsonRpcResponse> StandardJsonRpcResponses = CreateStandardJsonRpcResponses();
+        private protected static readonly string ContentTypeHeaderValue = $"{JsonRpcTransport.MediaType}; charset={JsonRpcTransport.Charset}";
+        private protected static readonly IReadOnlyDictionary<long, JsonRpcError> StandardJsonRpcErrors = CreateStandardJsonRpcErrors();
+        private protected static readonly IReadOnlyDictionary<long, JsonRpcResponse> StandardJsonRpcResponses = CreateStandardJsonRpcResponses();
 
         private protected JsonRpcMiddleware()
         {
         }
 
-        private static Dictionary<string, Encoding> CreateSupportedEncodings()
-        {
-            return new Dictionary<string, Encoding>(StringComparer.OrdinalIgnoreCase)
-            {
-                [Encoding.UTF8.WebName] = new UTF8Encoding(false, true),
-                [Encoding.Unicode.WebName] = new UnicodeEncoding(false, false, true),
-                [Encoding.UTF32.WebName] = new UTF32Encoding(false, false, true)
-            };
-        }
-
-        private static Dictionary<long, JsonRpcError> CreateStandardJsonRpcErrors()
+        private static IReadOnlyDictionary<long, JsonRpcError> CreateStandardJsonRpcErrors()
         {
             return new Dictionary<long, JsonRpcError>
             {
@@ -48,7 +35,7 @@ namespace Anemonis.AspNetCore.JsonRpc
             };
         }
 
-        private static Dictionary<long, JsonRpcResponse> CreateStandardJsonRpcResponses()
+        private static IReadOnlyDictionary<long, JsonRpcResponse> CreateStandardJsonRpcResponses()
         {
             return new Dictionary<long, JsonRpcResponse>
             {

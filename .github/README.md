@@ -13,7 +13,7 @@
 
 - The middleware transparently handles batch JSON-RPC requests.
 - The middleware automatically handles standard JSON-RPC errors.
-- The middleware does not verify the `Content-Length` header.
+- The middleware does not verify the `Content-Length` and `Accept` headers.
 - A service supports default method parameter values for named parameters not provided in a request.
 
 In addition to the standard JSON-RPC error codes the middleware may return the following JSON-RPC errors:
