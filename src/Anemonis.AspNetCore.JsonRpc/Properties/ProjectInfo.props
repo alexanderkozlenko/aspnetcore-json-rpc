@@ -1,16 +1,12 @@
-﻿<!-- © Alexander Kozlenko. Licensed under the MIT License. -->
-<Project>
+﻿<Project>
   <PropertyGroup>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <VersionPrefix>1.19.0</VersionPrefix>
     <VersionSuffix>beta</VersionSuffix>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors><![CDATA[Alexander Kozlenko]]></Authors>
     <Copyright><![CDATA[© $(Authors). All rights reserved.]]></Copyright>
     <Description><![CDATA[JSON-RPC 2.0 middleware for ASP.NET Core 3 based on the "JSON-RPC 2.0 Transport: HTTP" specification]]></Description>
     <PackageTags><![CDATA[aspnetcore json-rpc json rpc]]></PackageTags>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BuildNumber)' != ''">
-    <VersionSuffix Condition="'$(VersionSuffix)' != ''">$(VersionSuffix)-$(BuildNumber)</VersionSuffix>
   </PropertyGroup>
 </Project>
