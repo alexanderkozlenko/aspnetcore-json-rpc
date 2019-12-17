@@ -68,7 +68,7 @@ public class JsonRpcService : IJsonRpcService
     }
 }
 
-public class Startup : IStartup
+public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
@@ -134,7 +134,7 @@ public class JsonRpcHandler : IJsonRpcHandler
     }
 }
 
-public class Startup : IStartup
+public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
