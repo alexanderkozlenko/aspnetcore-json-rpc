@@ -10,16 +10,6 @@ namespace Anemonis.AspNetCore.JsonRpc
 {
     internal static class JsonRpcLoggerExtensions
     {
-        private static readonly Action<ILogger, Exception> _logDataIsMessage =
-            LoggerMessage.Define(
-                LogLevel.Trace,
-                new EventId(1000, "JSONRPC_DATA_IS_MESSAGE"),
-                Strings.GetString("handler.data_is_message"));
-        private static readonly Action<ILogger, int, Exception> _logDataIsBatch =
-            LoggerMessage.Define<int>(
-                LogLevel.Trace,
-                new EventId(1001, "JSONRPC_DATA_IS_BATCH"),
-                Strings.GetString("handler.data_is_batch"));
         private static readonly Action<ILogger, int, Exception> _logHandledNotificationSuccessfully =
             LoggerMessage.Define<int>(
                 LogLevel.Debug,
@@ -65,16 +55,6 @@ namespace Anemonis.AspNetCore.JsonRpc
                 LogLevel.Error,
                 new EventId(1402, "JSONRPC_BATCH_HAS_DUPLICATE_IDENTIFIERS"),
                 Strings.GetString("handler.batch_has_duplicate_identifiers"));
-
-        public static void LogDataIsMessage(this ILogger logger)
-        {
-            _logDataIsMessage.Invoke(logger, null);
-        }
-
-        public static void LogDataIsBatch(this ILogger logger, int count)
-        {
-            _logDataIsBatch.Invoke(logger, count, null);
-        }
 
         public static void LogHandledNotificationSuccessfully(this ILogger logger, int index)
         {

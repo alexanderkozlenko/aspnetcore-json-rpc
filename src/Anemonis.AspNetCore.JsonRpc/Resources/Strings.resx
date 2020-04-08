@@ -120,12 +120,6 @@
   <data name="handler.batch_has_duplicate_identifiers" xml:space="preserve">
     <value>The request contains a JSON-RPC batch with duplicate identifiers</value>
   </data>
-  <data name="handler.data_is_batch" xml:space="preserve">
-    <value>The request contains a JSON-RPC batch (size: {0})</value>
-  </data>
-  <data name="handler.data_is_message" xml:space="preserve">
-    <value>The request contains a single JSON-RPC message</value>
-  </data>
   <data name="handler.data_invalid" xml:space="preserve">
     <value>The request contains invalid JSON-RPC data</value>
   </data>

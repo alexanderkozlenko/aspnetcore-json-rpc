@@ -32,8 +32,6 @@ According to the current logging configuration, the following events may appear 
 
 | ID | Level | Reason |
 | :---: | :---: | --- |
-| `1000` | `Trace` | The request contains a single JSON-RPC message |
-| `1001` | `Trace` | The request contains a JSON-RPC batch |
 | `1100` | `Debug` | A JSON-RPC notification handled successfully |
 | `1110` | `Debug` | A JSON-RPC request handled with result successfully |
 | `1111` | `Debug` | A JSON-RPC request handled with error successfully |

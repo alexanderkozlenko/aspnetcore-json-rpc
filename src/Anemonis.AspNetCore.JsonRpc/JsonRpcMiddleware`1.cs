@@ -189,8 +189,6 @@ namespace Anemonis.AspNetCore.JsonRpc
             {
                 var jsonRpcRequestItem = jsonRpcRequestData.Item;
 
-                _logger.LogDataIsMessage();
-
                 context.RequestAborted.ThrowIfCancellationRequested();
 
                 var jsonRpcResponse = await CreateJsonRpcResponseAsync(jsonRpcRequestItem, 0);
@@ -215,9 +213,6 @@ namespace Anemonis.AspNetCore.JsonRpc
             else
             {
                 var jsonRpcRequestItems = jsonRpcRequestData.Items;
-
-                _logger.LogDataIsBatch(jsonRpcRequestItems.Count);
-
                 var jsonRpcRequestIdentifiers = new HashSet<JsonRpcId>();
 
                 for (var i = 0; i < jsonRpcRequestItems.Count; i++)
