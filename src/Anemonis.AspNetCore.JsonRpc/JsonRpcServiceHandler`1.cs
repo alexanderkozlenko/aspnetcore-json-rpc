@@ -173,16 +173,13 @@ namespace Anemonis.AspNetCore.JsonRpc
             }
         }
 
-        /// <summary>Get contracts for JSON-RPC requests deserialization.</summary>
-        /// <returns>A dictionary with JSON-RPC request contracts.</returns>
+        /// <inheritdoc />
         public IReadOnlyDictionary<string, JsonRpcRequestContract> GetContracts()
         {
             return _contracts;
         }
 
-        /// <summary>Handles a JSON-RPC request and returns a JSON-RPC response or <see langword="null" /> for a notification as an asynchronous operation.</summary>
-        /// <param name="request">The JSON-RPC request.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result is a JSON-RPC response or <see langword="null" /> for a notification.</returns>
+        /// <inheritdoc />
         /// <exception cref="ArgumentNullException"><paramref name="request" /> is <see langword="null" />.</exception>
         public async Task<JsonRpcResponse> HandleAsync(JsonRpcRequest request)
         {
@@ -286,7 +283,7 @@ namespace Anemonis.AspNetCore.JsonRpc
             return null;
         }
 
-        /// <summary>Disposes the corresponding instance of a JSON-RPC service.</summary>
+        /// <inheritdoc />
         public void Dispose()
         {
             (_service as IDisposable)?.Dispose();
