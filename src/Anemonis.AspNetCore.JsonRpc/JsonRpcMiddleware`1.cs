@@ -20,7 +20,8 @@ using Microsoft.Net.Http.Headers;
 
 using Newtonsoft.Json;
 
-#pragma warning disable CA1303, CA2007
+#pragma warning disable CA1303
+#pragma warning disable CA2007
 
 namespace Anemonis.AspNetCore.JsonRpc
 {
