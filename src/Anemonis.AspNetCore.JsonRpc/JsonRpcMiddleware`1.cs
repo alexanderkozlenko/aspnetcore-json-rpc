@@ -280,7 +280,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                 await _serializer.SerializeResponseAsync(jsonRpcResponse, responseStream, encoding, context.RequestAborted);
 
                 context.Response.ContentLength = responseStream.Length;
-                responseStream.Position = 0;
+                responseStream.Position = 0L;
 
                 await responseStream.CopyToAsync(context.Response.Body);
             }
@@ -295,7 +295,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                 await _serializer.SerializeResponsesAsync(jsonRpcResponses, responseStream, encoding, context.RequestAborted);
 
                 context.Response.ContentLength = responseStream.Length;
-                responseStream.Position = 0;
+                responseStream.Position = 0L;
 
                 await responseStream.CopyToAsync(context.Response.Body);
             }
