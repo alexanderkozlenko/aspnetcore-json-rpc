@@ -1,0 +1,26 @@
+name: "CodeQL"
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  analyse:
+    runs-on: ubuntu-latest
+    steps:
+    - name: sources.checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+    - run: git checkout HEAD^2
+      if: ${{ github.event_name == 'pull_request' }}
+    - name: code-ql.prepare
+      uses: github/codeql-action/init@v1
+      with:
+        languages: csharp
+    - name: sources.build
+      uses: github/codeql-action/autobuild@v1
+    - name: code-ql.analyze
+      uses: github/codeql-action/analyze@v1
