@@ -83,12 +83,12 @@ stages:
       condition: and(succeeded(), not(canceled()))
     - task: SonarCloudPublish@1
       displayName: 'sonar.publish'
-      condition: and(succeeded(), not(canceled()), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      condition: and(succeeded(), not(canceled()), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
 - stage: Push
   dependsOn:
   - Pack
   - Test
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SkipPush'], ''))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.SkipPush'], ''))
   jobs:
   - job: Release
     steps:
