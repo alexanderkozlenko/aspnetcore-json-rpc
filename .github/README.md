@@ -1,6 +1,6 @@
 # Anemonis.AspNetCore.JsonRpc
 
-[JSON-RPC 2.0](http://www.jsonrpc.org/specification) middleware for ASP.NET Core 3 based on the [JSON-RPC 2.0 Transport: HTTP](https://www.simple-is-better.org/json-rpc/transport_http.html) specification and the [Anemonis.JsonRpc](https://github.com/alexanderkozlenko/json-rpc)
+[JSON-RPC 2.0](http://www.jsonrpc.org/specification) middleware for ASP.NET Core in .NET 5 based on the [JSON-RPC 2.0 Transport: HTTP](https://www.simple-is-better.org/json-rpc/transport_http.html) specification and the [Anemonis.JsonRpc](https://github.com/alexanderkozlenko/json-rpc)
  serializer.
 
 | [![](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/anemonis/aspnetcore-json-rpc) | Release | Current |
