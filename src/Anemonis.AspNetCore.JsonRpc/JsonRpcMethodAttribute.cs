@@ -15,7 +15,7 @@ namespace Anemonis.AspNetCore.JsonRpc
         /// <exception cref="ArgumentNullException"><paramref name="methodName" /> is <see langword="null" />.</exception>
         public JsonRpcMethodAttribute(string methodName)
         {
-            if (methodName == null)
+            if (methodName is null)
             {
                 throw new ArgumentNullException(nameof(methodName));
             }
@@ -30,7 +30,7 @@ namespace Anemonis.AspNetCore.JsonRpc
         public JsonRpcMethodAttribute(string methodName, params int[] parameterPositions)
             : this(methodName)
         {
-            if (parameterPositions == null)
+            if (parameterPositions is null)
             {
                 throw new ArgumentNullException(nameof(parameterPositions));
             }
@@ -46,7 +46,7 @@ namespace Anemonis.AspNetCore.JsonRpc
         public JsonRpcMethodAttribute(string methodName, params string[] parameterNames)
             : this(methodName)
         {
-            if (parameterNames == null)
+            if (parameterNames is null)
             {
                 throw new ArgumentNullException(nameof(parameterNames));
             }

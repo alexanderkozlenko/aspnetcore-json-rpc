@@ -21,11 +21,11 @@ namespace Microsoft.AspNetCore.Builder
         /// <exception cref="ArgumentNullException"><paramref name="builder" /> or <paramref name="type" /> is <see langword="null" />.</exception>
         public static IApplicationBuilder UseJsonRpcHandler(this IApplicationBuilder builder, Type type, PathString path = default)
         {
-            if (builder == null)
+            if (builder is null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -36,7 +36,7 @@ namespace Microsoft.AspNetCore.Builder
             {
                 var jsonRpcRouteAtribute = type.GetCustomAttribute<JsonRpcRouteAttribute>();
 
-                if (jsonRpcRouteAtribute != null)
+                if (jsonRpcRouteAtribute is not null)
                 {
                     path = jsonRpcRouteAtribute.Path;
                 }
@@ -56,7 +56,7 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseJsonRpcHandler<T>(this IApplicationBuilder builder, PathString path = default)
             where T : class, IJsonRpcHandler
         {
-            if (builder == null)
+            if (builder is null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
@@ -65,7 +65,7 @@ namespace Microsoft.AspNetCore.Builder
             {
                 var jsonRpcRouteAtribute = typeof(T).GetCustomAttribute<JsonRpcRouteAttribute>();
 
-                if (jsonRpcRouteAtribute != null)
+                if (jsonRpcRouteAtribute is not null)
                 {
                     path = jsonRpcRouteAtribute.Path;
                 }
@@ -80,7 +80,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <exception cref="ArgumentNullException"><paramref name="builder" /> is <see langword="null" />.</exception>
         public static IApplicationBuilder UseJsonRpcHandlers(this IApplicationBuilder builder)
         {
-            if (builder == null)
+            if (builder is null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
@@ -91,7 +91,7 @@ namespace Microsoft.AspNetCore.Builder
             {
                 var jsonRpcRouteAtribute = types[i].GetCustomAttribute<JsonRpcRouteAttribute>();
 
-                if (jsonRpcRouteAtribute == null)
+                if (jsonRpcRouteAtribute is null)
                 {
                     continue;
                 }
@@ -113,11 +113,11 @@ namespace Microsoft.AspNetCore.Builder
         /// <exception cref="ArgumentNullException"><paramref name="builder" /> or <paramref name="type" /> is <see langword="null" />.</exception>
         public static IApplicationBuilder UseJsonRpcService(this IApplicationBuilder builder, Type type, PathString path = default)
         {
-            if (builder == null)
+            if (builder is null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -128,7 +128,7 @@ namespace Microsoft.AspNetCore.Builder
             {
                 var jsonRpcRouteAtribute = type.GetCustomAttribute<JsonRpcRouteAttribute>();
 
-                if (jsonRpcRouteAtribute != null)
+                if (jsonRpcRouteAtribute is not null)
                 {
                     path = jsonRpcRouteAtribute.Path;
                 }
@@ -148,7 +148,7 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseJsonRpcService<T>(this IApplicationBuilder builder, PathString path = default)
             where T : class, IJsonRpcService
         {
-            if (builder == null)
+            if (builder is null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
@@ -157,7 +157,7 @@ namespace Microsoft.AspNetCore.Builder
             {
                 var jsonRpcRouteAtribute = typeof(T).GetCustomAttribute<JsonRpcRouteAttribute>();
 
-                if (jsonRpcRouteAtribute != null)
+                if (jsonRpcRouteAtribute is not null)
                 {
                     path = jsonRpcRouteAtribute.Path;
                 }
@@ -172,7 +172,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <exception cref="ArgumentNullException"><paramref name="builder" /> is <see langword="null" />.</exception>
         public static IApplicationBuilder UseJsonRpcServices(this IApplicationBuilder builder)
         {
-            if (builder == null)
+            if (builder is null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
@@ -183,7 +183,7 @@ namespace Microsoft.AspNetCore.Builder
             {
                 var jsonRpcRouteAtribute = types[i].GetCustomAttribute<JsonRpcRouteAttribute>();
 
-                if (jsonRpcRouteAtribute == null)
+                if (jsonRpcRouteAtribute is null)
                 {
                     continue;
                 }
@@ -202,7 +202,7 @@ namespace Microsoft.AspNetCore.Builder
         /// <exception cref="ArgumentNullException"><paramref name="builder" /> is <see langword="null" />.</exception>
         public static IApplicationBuilder UseJsonRpc(this IApplicationBuilder builder)
         {
-            if (builder == null)
+            if (builder is null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }

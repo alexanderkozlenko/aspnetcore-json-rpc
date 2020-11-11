@@ -20,11 +20,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException"><paramref name="services" /> or <paramref name="type" /> is <see langword="null" />.</exception>
         public static IServiceCollection AddJsonRpcHandler(this IServiceCollection services, Type type)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -46,7 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddJsonRpcHandler<T>(this IServiceCollection services)
             where T : class, IJsonRpcHandler
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
@@ -62,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException"><paramref name="services" /> is <see langword="null" />.</exception>
         public static IServiceCollection AddJsonRpcHandlers(this IServiceCollection services)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
@@ -73,7 +73,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 var jsonRpcRouteAtribute = types[i].GetCustomAttribute<JsonRpcRouteAttribute>();
 
-                if (jsonRpcRouteAtribute == null)
+                if (jsonRpcRouteAtribute is null)
                 {
                     continue;
                 }
@@ -94,11 +94,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException"><paramref name="services" /> or <paramref name="type" /> is <see langword="null" />.</exception>
         public static IServiceCollection AddJsonRpcService(this IServiceCollection services, Type type)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -120,7 +120,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddJsonRpcService<T>(this IServiceCollection services)
             where T : class, IJsonRpcService
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
@@ -136,7 +136,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException"><paramref name="services" /> is <see langword="null" />.</exception>
         public static IServiceCollection AddJsonRpcServices(this IServiceCollection services)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
@@ -147,7 +147,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 var jsonRpcRouteAtribute = types[i].GetCustomAttribute<JsonRpcRouteAttribute>();
 
-                if (jsonRpcRouteAtribute == null)
+                if (jsonRpcRouteAtribute is null)
                 {
                     continue;
                 }
@@ -166,7 +166,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException"><paramref name="services" /> is <see langword="null" />.</exception>
         public static IServiceCollection AddJsonRpc(this IServiceCollection services)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
@@ -184,11 +184,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException"><paramref name="services" /> or <paramref name="configureOptions" /> is <see langword="null" />.</exception>
         public static IServiceCollection AddJsonRpc(this IServiceCollection services, Action<JsonRpcOptions> configureOptions)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
-            if (configureOptions == null)
+            if (configureOptions is null)
             {
                 throw new ArgumentNullException(nameof(configureOptions));
             }

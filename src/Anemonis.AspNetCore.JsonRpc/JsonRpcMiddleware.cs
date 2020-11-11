@@ -18,33 +18,33 @@ namespace Anemonis.AspNetCore.JsonRpc
         {
         }
 
-        private static IReadOnlyDictionary<long, JsonRpcError> CreateStandardJsonRpcErrors()
+        private static Dictionary<long, JsonRpcError> CreateStandardJsonRpcErrors()
         {
-            return new Dictionary<long, JsonRpcError>
+            return new()
             {
                 [JsonRpcErrorCode.InvalidFormat] =
-                    new JsonRpcError(JsonRpcErrorCode.InvalidFormat, Strings.GetString("rpc.error.invalid_format")),
+                    new(JsonRpcErrorCode.InvalidFormat, Strings.GetString("rpc.error.invalid_format")),
                 [JsonRpcErrorCode.InvalidOperation] =
-                    new JsonRpcError(JsonRpcErrorCode.InvalidOperation, Strings.GetString("rpc.error.invalid_operation")),
+                    new(JsonRpcErrorCode.InvalidOperation, Strings.GetString("rpc.error.invalid_operation")),
                 [JsonRpcErrorCode.InvalidParameters] =
-                    new JsonRpcError(JsonRpcErrorCode.InvalidParameters, Strings.GetString("rpc.error.invalid_parameters")),
+                    new(JsonRpcErrorCode.InvalidParameters, Strings.GetString("rpc.error.invalid_parameters")),
                 [JsonRpcErrorCode.InvalidMethod] =
-                    new JsonRpcError(JsonRpcErrorCode.InvalidMethod, Strings.GetString("rpc.error.invalid_method")),
+                    new(JsonRpcErrorCode.InvalidMethod, Strings.GetString("rpc.error.invalid_method")),
                 [JsonRpcErrorCode.InvalidMessage] =
-                    new JsonRpcError(JsonRpcErrorCode.InvalidMessage, Strings.GetString("rpc.error.invalid_message"))
+                    new(JsonRpcErrorCode.InvalidMessage, Strings.GetString("rpc.error.invalid_message"))
             };
         }
 
-        private static IReadOnlyDictionary<long, JsonRpcResponse> CreateStandardJsonRpcResponses()
+        private static Dictionary<long, JsonRpcResponse> CreateStandardJsonRpcResponses()
         {
-            return new Dictionary<long, JsonRpcResponse>
+            return new()
             {
                 [JsonRpcErrorCode.InvalidFormat] =
-                    new JsonRpcResponse(default, new JsonRpcError(JsonRpcErrorCode.InvalidFormat, Strings.GetString("rpc.error.invalid_format"))),
+                    new(default, new(JsonRpcErrorCode.InvalidFormat, Strings.GetString("rpc.error.invalid_format"))),
                 [JsonRpcErrorCode.InvalidOperation] =
-                    new JsonRpcResponse(default, new JsonRpcError(JsonRpcErrorCode.InvalidOperation, Strings.GetString("rpc.error.invalid_operation"))),
+                    new(default, new(JsonRpcErrorCode.InvalidOperation, Strings.GetString("rpc.error.invalid_operation"))),
                 [JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers] =
-                    new JsonRpcResponse(default, new JsonRpcError(JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers, Strings.GetString("rpc.error.batch_has_duplicate_identifiers")))
+                    new(default, new(JsonRpcHandlerErrorCode.BatchHasDuplicateIdentifiers, Strings.GetString("rpc.error.batch_has_duplicate_identifiers")))
             };
         }
     }

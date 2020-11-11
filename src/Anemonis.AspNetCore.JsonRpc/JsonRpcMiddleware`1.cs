@@ -20,9 +20,6 @@ using Microsoft.Net.Http.Headers;
 
 using Newtonsoft.Json;
 
-#pragma warning disable CA1303
-#pragma warning disable CA2007
-
 namespace Anemonis.AspNetCore.JsonRpc
 {
     /// <summary>Represents a middleware for adding a JSON-RPC handler to the application's request pipeline.</summary>
@@ -42,15 +39,15 @@ namespace Anemonis.AspNetCore.JsonRpc
         /// <exception cref="ArgumentNullException"><paramref name="services" />, <paramref name="environment" />, or <paramref name="logger" /> is <see langword="null" />.</exception>
         public JsonRpcMiddleware(IServiceProvider services, IWebHostEnvironment environment, ILogger<JsonRpcMiddleware<T>> logger)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
-            if (environment == null)
+            if (environment is null)
             {
                 throw new ArgumentNullException(nameof(environment));
             }
-            if (logger == null)
+            if (logger is null)
             {
                 throw new ArgumentNullException(nameof(logger));
             }
@@ -58,7 +55,7 @@ namespace Anemonis.AspNetCore.JsonRpc
             _environment = environment;
             _logger = logger;
             _handler = services.GetService<T>() ?? ActivatorUtilities.CreateInstance<T>(services);
-            _serializer = new JsonRpcSerializer(CreateJsonRpcContractResolver(_handler), services.GetService<IOptions<JsonRpcOptions>>()?.Value?.JsonSerializer);
+            _serializer = new(CreateJsonRpcContractResolver(_handler), services.GetService<IOptions<JsonRpcOptions>>()?.Value?.JsonSerializer);
         }
 
         private static bool IsReservedErrorCode(long code)
@@ -77,7 +74,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
             foreach (var kvp in contracts)
             {
-                if (kvp.Key == null)
+                if (kvp.Key is null)
                 {
                     throw new InvalidOperationException(Strings.GetString("handler.contract.method_name.invalid_value"));
                 }
@@ -96,7 +93,7 @@ namespace Anemonis.AspNetCore.JsonRpc
         /// <exception cref="ArgumentNullException"><paramref name="context" /> is <see langword="null" />.</exception>
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -158,7 +155,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 if (_environment.EnvironmentName == Environments.Development)
                 {
-                    jsonRpcResponse = new JsonRpcResponse(default, new JsonRpcError(jsonRpcResponse.Error.Code, jsonRpcResponse.Error.Message, e.ToString()));
+                    jsonRpcResponse = new(default, new JsonRpcError(jsonRpcResponse.Error.Code, jsonRpcResponse.Error.Message, e.ToString()));
                 }
 
                 context.Response.StatusCode = StatusCodes.Status200OK;
@@ -175,7 +172,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 if (_environment.EnvironmentName == Environments.Development)
                 {
-                    jsonRpcResponse = new JsonRpcResponse(default, new JsonRpcError(jsonRpcResponse.Error.Code, jsonRpcResponse.Error.Message, e.ToString()));
+                    jsonRpcResponse = new(default, new JsonRpcError(jsonRpcResponse.Error.Code, jsonRpcResponse.Error.Message, e.ToString()));
                 }
 
                 context.Response.StatusCode = StatusCodes.Status200OK;
@@ -193,7 +190,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 var jsonRpcResponse = await CreateJsonRpcResponseAsync(jsonRpcRequestItem, 0);
 
-                if (jsonRpcResponse == null)
+                if (jsonRpcResponse is null)
                 {
                     context.Response.StatusCode = StatusCodes.Status204NoContent;
 
@@ -245,7 +242,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                     var jsonRpcRequestItem = jsonRpcRequestItems[i];
                     var jsonRpcResponse = await CreateJsonRpcResponseAsync(jsonRpcRequestItem, i);
 
-                    if (jsonRpcResponse != null)
+                    if (jsonRpcResponse is not null)
                     {
                         if (jsonRpcRequestItem.IsValid && jsonRpcRequestItem.Message.IsNotification)
                         {
@@ -313,17 +310,17 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 if (_environment.EnvironmentName == Environments.Development)
                 {
-                    jsonRpcError = new JsonRpcError(jsonRpcError.Code, jsonRpcError.Message, exception.ToString());
+                    jsonRpcError = new(jsonRpcError.Code, jsonRpcError.Message, exception.ToString());
                 }
 
-                return new JsonRpcResponse(exception.MessageId, jsonRpcError);
+                return new(exception.MessageId, jsonRpcError);
             }
 
             var request = requestInfo.Message;
             var requestId = request.Id;
             var response = await _handler.HandleAsync(request);
 
-            if (response != null)
+            if (response is not null)
             {
                 var responseId = response.Id;
 

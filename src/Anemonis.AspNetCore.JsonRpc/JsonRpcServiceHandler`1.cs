@@ -13,8 +13,6 @@ using Anemonis.JsonRpc;
 
 using Microsoft.Extensions.DependencyInjection;
 
-#pragma warning disable CA1810
-
 namespace Anemonis.AspNetCore.JsonRpc
 {
     /// <summary>Represents a JSON-RPC handler for a JSON-RPC service.</summary>
@@ -22,8 +20,8 @@ namespace Anemonis.AspNetCore.JsonRpc
     public sealed class JsonRpcServiceHandler<T> : IJsonRpcHandler, IDisposable
         where T : class, IJsonRpcService
     {
-        private static readonly Dictionary<string, JsonRpcMethodInfo> _metadata;
-        private static readonly Dictionary<string, JsonRpcRequestContract> _contracts;
+        private static readonly Dictionary<string, JsonRpcMethodInfo> s_metadata;
+        private static readonly Dictionary<string, JsonRpcRequestContract> s_contracts;
 
         private readonly T _service;
 
@@ -42,8 +40,8 @@ namespace Anemonis.AspNetCore.JsonRpc
                 contracts[kvp.Key] = kvp.Value.Contract;
             }
 
-            _metadata = metadata;
-            _contracts = contracts;
+            s_metadata = metadata;
+            s_contracts = contracts;
         }
 
         /// <summary>Initializes a new instance of the <see cref="JsonRpcServiceHandler{T}" /> class.</summary>
@@ -51,7 +49,7 @@ namespace Anemonis.AspNetCore.JsonRpc
         /// <exception cref="ArgumentNullException"><paramref name="serviceProvider" /> is <see langword="null" />.</exception>
         public JsonRpcServiceHandler(IServiceProvider serviceProvider)
         {
-            if (serviceProvider == null)
+            if (serviceProvider is null)
             {
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
@@ -61,7 +59,7 @@ namespace Anemonis.AspNetCore.JsonRpc
 
         private static void FindContracts(Dictionary<string, (JsonRpcRequestContract, JsonRpcMethodInfo)> blueprint, Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return;
             }
@@ -83,7 +81,7 @@ namespace Anemonis.AspNetCore.JsonRpc
             {
                 var attribute = method.GetCustomAttribute<JsonRpcMethodAttribute>();
 
-                if (attribute == null)
+                if (attribute is null)
                 {
                     continue;
                 }
@@ -126,8 +124,8 @@ namespace Anemonis.AspNetCore.JsonRpc
                                 contractParameters[parameterPositions[i]] = parameters[i].ParameterType;
                             }
 
-                            contract = new JsonRpcRequestContract(contractParameters);
-                            methodInfo = new JsonRpcMethodInfo(method, parameterPositions);
+                            contract = new(contractParameters);
+                            methodInfo = new(method, parameterPositions);
                         }
                         break;
                     case JsonRpcParametersType.ByName:
@@ -152,8 +150,8 @@ namespace Anemonis.AspNetCore.JsonRpc
                                 methodParameterNames[i] = parameterNames[i];
                             }
 
-                            contract = new JsonRpcRequestContract(contractParameters);
-                            methodInfo = new JsonRpcMethodInfo(method, methodParameterNames);
+                            contract = new(contractParameters);
+                            methodInfo = new(method, methodParameterNames);
                         }
                         break;
                     default:
@@ -163,8 +161,8 @@ namespace Anemonis.AspNetCore.JsonRpc
                                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.method.invalid_parameters_count"), method.Name, typeof(T)));
                             }
 
-                            contract = new JsonRpcRequestContract();
-                            methodInfo = new JsonRpcMethodInfo(method);
+                            contract = new();
+                            methodInfo = new(method);
                         }
                         break;
                 }
@@ -176,20 +174,20 @@ namespace Anemonis.AspNetCore.JsonRpc
         /// <inheritdoc />
         public IReadOnlyDictionary<string, JsonRpcRequestContract> GetContracts()
         {
-            return _contracts;
+            return s_contracts;
         }
 
         /// <inheritdoc />
         /// <exception cref="ArgumentNullException"><paramref name="request" /> is <see langword="null" />.</exception>
         public async Task<JsonRpcResponse> HandleAsync(JsonRpcRequest request)
         {
-            if (request == null)
+            if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
             var requestId = request.Id;
-            var methodInfo = _metadata[request.Method];
+            var methodInfo = s_metadata[request.Method];
             var method = methodInfo.Method;
             var parameters = method.GetParameters();
             var parameterValues = default(object[]);
@@ -222,7 +220,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                                 {
                                     var message = string.Format(CultureInfo.CurrentCulture, Strings.GetString("service.request.parameter.undefined_value"), request.Method, methodInfo.ParameterNames[i]);
 
-                                    return new JsonRpcResponse(requestId, new JsonRpcError(JsonRpcErrorCode.InvalidParameters, message));
+                                    return new(requestId, new(JsonRpcErrorCode.InvalidParameters, message));
                                 }
                             }
                         }
@@ -240,7 +238,7 @@ namespace Anemonis.AspNetCore.JsonRpc
                 {
                     var jsonRpcResult = await (dynamic)method.Invoke(_service, parameterValues) as object;
 
-                    return new JsonRpcResponse(requestId, jsonRpcResult);
+                    return new(requestId, jsonRpcResult);
                 }
             }
             catch (JsonRpcServiceException e)
@@ -249,14 +247,14 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 if (e.HasErrorData)
                 {
-                    responseError = new JsonRpcError(e.Code, e.Message, e.ErrorData);
+                    responseError = new(e.Code, e.Message, e.ErrorData);
                 }
                 else
                 {
-                    responseError = new JsonRpcError(e.Code, e.Message);
+                    responseError = new(e.Code, e.Message);
                 }
 
-                return new JsonRpcResponse(requestId, responseError);
+                return new(requestId, responseError);
             }
             catch (TargetInvocationException e)
                 when (e.InnerException is JsonRpcServiceException jrse)
@@ -265,17 +263,17 @@ namespace Anemonis.AspNetCore.JsonRpc
 
                 if (jrse.HasErrorData)
                 {
-                    responseError = new JsonRpcError(jrse.Code, jrse.Message, jrse.ErrorData);
+                    responseError = new(jrse.Code, jrse.Message, jrse.ErrorData);
                 }
                 else
                 {
-                    responseError = new JsonRpcError(jrse.Code, jrse.Message);
+                    responseError = new(jrse.Code, jrse.Message);
                 }
 
-                return new JsonRpcResponse(requestId, responseError);
+                return new(requestId, responseError);
             }
             catch (TargetInvocationException e)
-                when (e.InnerException != null)
+                when (e.InnerException is not null)
             {
                 ExceptionDispatchInfo.Capture(e.InnerException).Throw();
             }

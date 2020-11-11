@@ -15,12 +15,12 @@ namespace Anemonis.AspNetCore.JsonRpc
         /// <exception cref="ArgumentNullException"><paramref name="path" /> is <see langword="null" />.</exception>
         public JsonRpcRouteAttribute(string path)
         {
-            if (path == null)
+            if (path is null)
             {
                 throw new ArgumentNullException(nameof(path));
             }
 
-            Path = new PathString(path);
+            Path = new(path);
         }
 
         internal PathString Path
